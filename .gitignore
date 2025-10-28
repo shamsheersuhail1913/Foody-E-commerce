@@ -1,0 +1,25 @@
+# Ignore node modules if you ever add JS tooling
+node_modules/
+
+# VS Code settings and workspace
+.vscode/
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Env files
+.env
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# MacOS
+.Trashes
+
+# Ignore OneDrive desktop.ini
+desktop.ini
