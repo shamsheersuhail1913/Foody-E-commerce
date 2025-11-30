@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Foody - Premium Food Delivery Service</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍽️</text></svg>" type="image/svg+xml">
+    <script src="populate-sample-data.js"></script>
+    <style>
+        /* Disable text selection */
+        * {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        
+        .nav-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: white;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+            border-radius: 5px;
+            top: 100%;
+            left: 0;
+        }
+        
+        .dropdown-content a {
+            color: #2c3e50;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            font-size: 14px;
+        }
+        
+        .dropdown-content a:hover {
+            background-color: #f1f1f1;
+        }
+        
+        .nav-dropdown:hover .dropdown-content {
+            display: block;
+        }
+        
+        .nav-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: white;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+            border-radius: 5px;
+            top: 100%;
+            left: 0;
+        }
+        
+        .dropdown-content a {
+            color: #2c3e50;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            font-size: 14px;
+        }
+        
+        .dropdown-content a:hover {
+            background-color: #f1f1f1;
+        }
+        
+        .nav-dropdown:hover .dropdown-content {
+            display: block;
+        }
+        
+        .floating-mycart-btn {
+            position: fixed;
+            right: 30px;
+            bottom: 30px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(231, 76, 60, 0.4);
+            z-index: 1000;
+            transition: all 0.3s ease;
+            animation: float 3s ease-in-out infinite;
+        }
+        .floating-mycart-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 25px rgba(231, 76, 60, 0.6);
+        }
+        .floating-mycart-btn i {
+            color: white;
+            font-size: 24px;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+        
+        .contact-section {
+            padding: 80px 0;
+            background: #f8f9fa;
+        }
+        
+        .contact-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            margin-top: 50px;
+        }
+        
+        .contact-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .contact-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 20px;
+        }
+        
+        .contact-icon i {
+            color: white;
+            font-size: 20px;
+        }
+        
+        .contact-details h4 {
+            margin: 0 0 5px 0;
+            color: #2c3e50;
+            font-weight: 600;
+        }
+        
+        .contact-details p {
+            margin: 0;
+            color: #7f8c8d;
+        }
+        
+        .contact-form {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #ecf0f1;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #e74c3c;
+        }
+        
+        @media (max-width: 768px) {
+            .contact-content {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+        }
+        
+        /* Table Booking Cards Hover Effects */
+        .booking-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .booking-card:hover {
+            transform: translateY(-10px) scale(1.05);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2) !important;
+        }
+        
+        .booking-card:hover i {
+            transform: scale(1.2);
+            color: #c0392b !important;
+        }
+        
+        .booking-card:hover h3 {
+            color: #e74c3c !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <i class="fas fa-utensils"></i>
+                <span>Foody</span>
+            </div>
+            <nav class="nav">
+                <a href="#home" class="nav-link">Home</a>
+                <a href="view-menu.html" class="nav-link">Menu</a>
+                <a href="table-booking.html" class="nav-link">Book Table</a>
+                <a href="#features" class="nav-link">Features</a>
+                <div class="nav-dropdown">
+                    <a href="#" class="nav-link">History <i class="fas fa-chevron-down"></i></a>
+                    <div class="dropdown-content">
+                        <a href="history.html">Food Orders</a>
+                        <a href="table-history.html">Table Bookings</a>
+                    </div>
+                </div>
+                <a href="#contact-form" class="nav-link">Contact</a>
+            </nav>
+            <button class="mobile-menu-btn">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Floating MyCart Button -->
+    <div class="floating-mycart-btn" onclick="openCart()">
+        <i class="fas fa-shopping-bag"></i>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-background"></div>
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title">Premium Food Delivery<br><span class="highlight">At Your Doorstep</span></h1>
+                <p class="hero-subtitle">Experience culinary excellence with our curated selection of premium restaurants and lightning-fast delivery service</p>
+                <div class="hero-buttons">
+                    <button class="btn btn-primary" onclick="navigateToMenuTop()">Order Now</button>
+                    <button class="btn btn-primary" onclick="window.location.href='view-menu.html'">View Menu</button>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <span class="stat-number">50K+</span>
+                        <span class="stat-label">Happy Customers</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">200+</span>
+                        <span class="stat-label">Restaurant Partners</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">15min</span>
+                        <span class="stat-label">Average Delivery</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Why Choose Foody?</h2>
+                <p class="section-subtitle">Experience the difference with our premium food delivery service</p>
+            </div>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <h3>Lightning Fast Delivery</h3>
+                    <p>Get your food delivered in 15-30 minutes with our optimized delivery network and real-time tracking.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                    <h3>Table Booking</h3>
+                    <p>Reserve your table at premium restaurants with instant confirmation and flexible timing options.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Quality Guaranteed</h3>
+                    <p>Partnered exclusively with premium restaurants that meet our strict quality standards.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <h3>Live Tracking</h3>
+                    <p>Monitor your order in real-time from preparation to delivery with GPS tracking.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <h3>Premium Selection</h3>
+                    <p>Curated collection of top-rated restaurants and exclusive dishes you won't find elsewhere.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-headset"></i>
+                    </div>
+                    <h3>24/7 Support</h3>
+                    <p>Round-the-clock customer support to ensure your dining experience is always perfect.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Food Gallery -->
+    <section class="gallery" id="menu">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Food Categories</h2>
+                <p class="section-subtitle">Browse our delicious menu by category</p>
+            </div>
+            <div class="gallery-grid">
+                <div class="food-item" onclick="navigateToMenu('starters')" style="cursor: pointer;">
+                    <div class="food-image">
+                        <img src="https://www.cookwithmanali.com/wp-content/uploads/2015/07/Restaurant-Style-Recipe-Paneer-Tikka-480x270.jpg" alt="Starters" loading="lazy">
+                    </div>
+                    <div class="food-overlay">
+                        <div class="food-content">
+                            <h3>Starters</h3>
+                            <p>Appetizing starters to begin your meal perfectly</p>
+                            <span class="price">From ₹120</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="food-item" onclick="navigateToMenu('vegetarian')" style="cursor: pointer;">
+                    <div class="food-image">
+                        <img src="https://myfoodstory.com/wp-content/uploads/2021/07/restaurant-style-paneer-butter-masala-2-500x500.jpg" alt="Veg" loading="lazy">
+                    </div>
+                    <div class="food-overlay">
+                        <div class="food-content">
+                            <h3>Vegetarian</h3>
+                            <p>Fresh and flavorful vegetarian dishes</p>
+                            <span class="price">From ₹180</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="food-item" onclick="navigateToMenu('non-vegetarian')" style="cursor: pointer;">
+                    <div class="food-image">
+                        <img src="https://vikalinka.com/wp-content/uploads/2023/11/Chicken-Rogan-Josh-13-Edit.jpg" alt="Non-Veg" loading="lazy">
+                    </div>
+                    <div class="food-overlay">
+                        <div class="food-content">
+                            <h3>Non-Vegetarian</h3>
+                            <p>Delicious meat and chicken specialties</p>
+                            <span class="price">From ₹280</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="food-item" onclick="navigateToMenu('ice-cream')" style="cursor: pointer;">
+                    <div class="food-image">
+                        <img src="https://www.cuisinart.co.uk/dw/image/v2/ABAF_PRD/on/demandware.static/-/Sites-uk-cuisinart-sfra-Library/default/dw02d70fe5///images/recipes/classic-vanilla-ice-cream.jpg?sw=1200&sh=1200&sm=fit" alt="Ice-cream" loading="lazy">
+                    </div>
+                    <div class="food-overlay">
+                        <div class="food-content">
+                            <h3>Ice-cream</h3>
+                            <p>Cool and creamy ice-cream flavors</p>
+                            <span class="price">From ₹80</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="food-item" onclick="navigateToMenu('beverages')" style="cursor: pointer;">
+                    <div class="food-image">
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQAG_AOgxTbaj7wJEP0R2aiZoNf9xi99Khs-g&s" alt="Beverages" loading="lazy">
+                    </div>
+                    <div class="food-overlay">
+                        <div class="food-content">
+                            <h3>Beverages</h3>
+                            <p>Refreshing drinks and beverages</p>
+                            <span class="price">From ₹60</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="food-item" onclick="navigateToMenu('desserts')" style="cursor: pointer;">
+                    <div class="food-image">
+                        <img src="https://bikanermawabhandar.com/wp-content/uploads/2024/04/WhatsApp-Image-2024-04-16-at-16.59.43.jpeg" alt="Desserts" loading="lazy">
+                    </div>
+                    <div class="food-overlay">
+                        <div class="food-content">
+                            <h3>Desserts</h3>
+                            <p>Sweet treats and traditional desserts</p>
+                            <span class="price">From ₹150</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Table Booking Section -->
+    <section class="booking-preview" style="padding: 80px 0; background: linear-gradient(135deg, #2c3e50, #34495e);">
+        <div class="container">
+            <div class="section-header" style="text-align: center; margin-bottom: 50px;">
+                <h2 class="section-title" style="color: white;">Reserve Your Table</h2>
+                <p class="section-subtitle" style="color: #bdc3c7;">Book your perfect dining experience at our premium partner restaurants</p>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-bottom: 40px;">
+                <div class="booking-card" style="background: white; padding: 30px; border-radius: 15px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+                    <i class="fas fa-calendar-check" style="font-size: 50px; color: #e74c3c; margin-bottom: 20px; transition: all 0.3s ease;"></i>
+                    <h3 style="margin-bottom: 15px; color: #2c3e50; transition: all 0.3s ease;">Easy Booking</h3>
+                    <p style="color: #7f8c8d;">Simple online reservation system with instant confirmation</p>
+                </div>
+                <div class="booking-card" style="background: white; padding: 30px; border-radius: 15px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+                    <i class="fas fa-clock" style="font-size: 50px; color: #e74c3c; margin-bottom: 20px; transition: all 0.3s ease;"></i>
+                    <h3 style="margin-bottom: 15px; color: #2c3e50; transition: all 0.3s ease;">Flexible Timing</h3>
+                    <p style="color: #7f8c8d;">Choose from multiple time slots that suit your schedule</p>
+                </div>
+                <div class="booking-card" style="background: white; padding: 30px; border-radius: 15px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+                    <i class="fas fa-utensils" style="font-size: 50px; color: #e74c3c; margin-bottom: 20px; transition: all 0.3s ease;"></i>
+                    <h3 style="margin-bottom: 15px; color: #2c3e50; transition: all 0.3s ease;">Premium Restaurants</h3>
+                    <p style="color: #7f8c8d;">Access to exclusive dining venues and cuisines</p>
+                </div>
+            </div>
+            <div style="text-align: center;">
+                <button class="btn btn-primary" onclick="window.location.href='table-booking.html'" style="padding: 15px 40px; font-size: 18px;">
+                    <i class="fas fa-calendar-plus"></i> Book Your Table Now
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact-section" id="contact-form">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Get In Touch</h2>
+                <p class="section-subtitle">Have questions? We'd love to hear from you</p>
+            </div>
+            <div class="contact-content">
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div class="contact-details">
+                            <h4>Address</h4>
+                            <p>123 Food Street, Delivery City, DC 12345</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <div class="contact-details">
+                            <h4>Phone</h4>
+                            <p>7416244XXX</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div class="contact-details">
+                            <h4>Email</h4>
+                            <p>suhail123@gmail.com</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="contact-details">
+                            <h4>Hours</h4>
+                            <p>Mon - Sun: 9:00 AM - 11:00 PM</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="contact-form">
+                    <form>
+                        <div class="form-group">
+                            <input type="text" placeholder="Your Name" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="email" placeholder="Your Email" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="tel" placeholder="Your Phone" required>
+                        </div>
+                        <div class="form-group">
+                            <textarea placeholder="Your Message" rows="5" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Send Message</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer" id="contact">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <i class="fas fa-utensils"></i>
+                        <span>Foody</span>
+                    </div>
+                    <p class="footer-description">Premium food delivery service bringing the finest culinary experiences directly to your doorstep.</p>
+                    <div class="social-links">
+                        <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul class="footer-links">
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#menu">Menu</a></li>
+                        <li><a href="table-booking.html">Book Table</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Support</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">Track Order</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact Info</h4>
+                    <div class="contact-info">
+                        <p><i class="fas fa-user"></i> SHAMSHEER SUHAIL</p>
+                        <p><i class="fas fa-phone"></i> 7416244XXX</p>
+                        <p><i class="fas fa-envelope"></i> suhail123@gmail.com</p>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Foody. All rights reserved. | Designed with excellence</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Disable right-click context menu
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        
+        // Disable text selection with mouse
+        document.addEventListener('selectstart', e => e.preventDefault());
+        
+        // Disable keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && (e.key === 'c' || e.key === 'x' || e.key === 'v' || e.key === 'a' || e.key === 's' || e.key === 'u')) {
+                e.preventDefault();
+            }
+            if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I')) {
+                e.preventDefault();
+            }
+        });
+        
+        // Navigate to menu category
+        function navigateToMenu(category) {
+            sessionStorage.setItem('targetCategory', category);
+            window.location.href = 'browse-menu.html#' + category;
+        }
+        
+        // Navigate to order page from top
+        function navigateToMenuTop() {
+            sessionStorage.removeItem('targetCategory');
+            sessionStorage.removeItem('menuScrollPosition');
+            window.location.href = 'browse-menu.html';
+        }
+        
+        // Open cart function
+        function openCart() {
+            window.location.href = 'order.html';
+        }
+
+
+
+        // Add smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                const href = this.getAttribute('href');
+                const target = document.querySelector(href);
+                if (target) {
+                    e.preventDefault();
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+        
+        // Mobile menu functionality
+        document.querySelector('.mobile-menu-btn').addEventListener('click', function() {
+            const nav = document.querySelector('.nav');
+            nav.classList.toggle('active');
+        });
+    </script>
+</body>
+</html>

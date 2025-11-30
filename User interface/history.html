@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order History - Foody</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍽️</text></svg>" type="image/svg+xml">
+    <script src="history-manager.js"></script>
+    <script src="populate-sample-data.js"></script>
+    <style>
+        * { -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; }
+        .history-container { max-width: 1000px; margin: 0 auto; padding: 100px 20px 50px; }
+        .history-header { text-align: center; margin-bottom: 40px; }
+        .history-title { font-size: 2.5rem; font-weight: 700; color: #2c3e50; margin-bottom: 10px; }
+        .history-subtitle { font-size: 1.1rem; color: #7f8c8d; }
+        .order-card { background: white; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); margin-bottom: 20px; overflow: hidden; }
+        .order-header { background: #f8f9fa; padding: 20px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; }
+        .order-id { font-weight: 600; color: #2c3e50; }
+        .order-date { color: #7f8c8d; font-size: 0.9rem; }
+        .order-status { padding: 5px 15px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; }
+        .status-delivered { background: #d4edda; color: #155724; }
+        .status-cancelled { background: #f8d7da; color: #721c24; }
+        .order-items { padding: 20px; }
+        .history-item { display: flex; align-items: center; padding: 10px 0; border-bottom: 1px solid #f0f0f0; }
+        .history-item:last-child { border-bottom: none; }
+        .item-image { width: 50px; height: 50px; border-radius: 8px; object-fit: cover; margin-right: 15px; }
+        .item-details { flex: 1; }
+        .item-name { font-weight: 600; color: #2c3e50; margin-bottom: 2px; }
+        .item-quantity { color: #7f8c8d; font-size: 0.9rem; }
+        .item-price { font-weight: 700; color: #e74c3c; }
+        .order-total { background: #f8f9fa; padding: 15px 20px; text-align: right; font-weight: 700; color: #2c3e50; }
+        .back-btn { position: fixed; top: 80px; left: 25px; background: #e74c3c; color: white; border: none; padding: 15px 25px; border-radius: 30px; cursor: pointer; font-weight: 600; z-index: 1000; font-size: 1rem; }
+        .back-btn:hover { background: #c0392b; }
+        .empty-history { text-align: center; padding: 60px 20px; }
+        .empty-icon { font-size: 4rem; color: #bdc3c7; margin-bottom: 20px; }
+        .empty-text { font-size: 1.2rem; color: #7f8c8d; margin-bottom: 30px; }
+        .order-actions { padding: 15px 20px; border-top: 1px solid #eee; display: flex; gap: 10px; justify-content: flex-end; }
+        .action-btn { padding: 8px 16px; border: none; border-radius: 6px; cursor: pointer; font-size: 0.9rem; font-weight: 600; transition: all 0.3s ease; }
+        .reorder-btn { background: #27ae60; color: white; }
+        .reorder-btn:hover { background: #229954; }
+        .cancel-btn { background: #e74c3c; color: white; }
+        .cancel-btn:hover { background: #c0392b; }
+        .item-reorder-btn { background: #3498db; color: white; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer; font-size: 0.8rem; transition: all 0.3s ease; margin-left: 10px; }
+        .item-reorder-btn:hover { background: #2980b9; transform: scale(1.1); }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <i class="fas fa-utensils"></i>
+                <span>Foody</span>
+            </div>
+            <nav class="nav">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="view-menu.html" class="nav-link">Menu</a>
+                <a href="table-booking.html" class="nav-link">Book Table</a>
+                <a href="index.html#features" class="nav-link">Features</a>
+                <div class="nav-dropdown">
+                    <a href="#" class="nav-link active">History <i class="fas fa-chevron-down"></i></a>
+                    <div class="dropdown-content">
+                        <a href="history.html">Food Orders</a>
+                        <a href="table-history.html">Table Bookings</a>
+                    </div>
+                </div>
+                <a href="index.html#contact-form" class="nav-link" onclick="navigateToContact(event)">Contact</a>
+            </nav>
+            <button class="mobile-menu-btn">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </header>
+
+    <button class="back-btn" onclick="window.location.href='index.html'">
+        <i class="fas fa-arrow-left"></i> Back to Home
+    </button>
+
+    <div class="history-container">
+        <div class="history-header">
+            <h1 class="history-title">Order History</h1>
+            <p class="history-subtitle">Track your previous orders and reorder your favorites</p>
+        </div>
+
+        <div id="historyContent">
+            <div class="empty-history">
+                <div class="empty-icon"><i class="fas fa-history"></i></div>
+                <div class="empty-text">No order history found</div>
+                <button class="btn btn-primary" onclick="window.location.href='view-menu.html'">Start Ordering</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        document.addEventListener('selectstart', e => e.preventDefault());
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && (e.key === 'c' || e.key === 'x' || e.key === 'v' || e.key === 'a' || e.key === 's' || e.key === 'u')) {
+                e.preventDefault();
+            }
+            if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I')) {
+                e.preventDefault();
+            }
+        });
+
+        const itemImages = {
+            'Paneer Tikka': 'https://www.cookwithmanali.com/wp-content/uploads/2015/07/Restaurant-Style-Recipe-Paneer-Tikka-480x270.jpg',
+            'Veg Samosa (2 pcs)': 'https://images.unsplash.com/photo-1601050690597-df0568f70950?w=200&h=200&fit=crop',
+            'Chicken 65': 'https://images.unsplash.com/photo-1567620832903-9fc6debc209f?w=200&h=200&fit=crop',
+            'Fish Fingers': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTh2JszlxQ7XuaucmgcgVJ4MnUVs_PGItK5-A&s'
+        };
+
+        function loadOrderHistory() {
+            const orders = historyManager.getOrderHistory();
+            const historyContent = document.getElementById('historyContent');
+            
+            if (orders.length === 0) {
+                historyContent.innerHTML = `
+                    <div class="empty-history">
+                        <div class="empty-icon"><i class="fas fa-history"></i></div>
+                        <div class="empty-text">No order history found</div>
+                        <button class="btn btn-primary" onclick="window.location.href='view-menu.html'">Start Ordering</button>
+                    </div>
+                `;
+                return;
+            }
+
+            let historyHTML = '';
+            orders.forEach(order => {
+                const orderDate = new Date(order.date).toLocaleDateString('en-IN', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+
+                let itemsHTML = '';
+                order.items.forEach(item => {
+                    const imageUrl = itemImages[item.name] || 'https://via.placeholder.com/50x50?text=Food';
+                    itemsHTML += `
+                        <div class="history-item">
+                            <img src="${imageUrl}" alt="${item.name}" class="item-image">
+                            <div class="item-details">
+                                <div class="item-name">${item.name}</div>
+                                <div class="item-quantity">Qty: ${item.quantity}</div>
+                            </div>
+                            <div class="item-price">₹${item.price * item.quantity}</div>
+                            <button class="item-reorder-btn" onclick="reorderItem('${item.name}', ${item.price})" title="Reorder this item">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                    `;
+                });
+
+                let actionButtons = '';
+                if (order.status !== 'Delivered' && order.status !== 'Cancelled') {
+                    actionButtons += `<button class="action-btn cancel-btn" onclick="cancelOrder('${order.id}')"><i class="fas fa-times"></i> Cancel Order</button>`;
+                }
+                actionButtons += `<button class="action-btn reorder-btn" onclick="reorderOrder('${order.id}')"><i class="fas fa-redo"></i> Reorder All</button>`;
+
+                historyHTML += `
+                    <div class="order-card">
+                        <div class="order-header">
+                            <div>
+                                <div class="order-id">Order #${order.id}</div>
+                                <div class="order-date">${orderDate}</div>
+                            </div>
+                            <div class="order-status status-${order.status.toLowerCase()}">${order.status}</div>
+                        </div>
+                        <div class="order-items">
+                            ${itemsHTML}
+                        </div>
+                        <div class="order-total">Total: ₹${order.total}</div>
+                        <div class="order-actions">
+                            ${actionButtons}
+                        </div>
+                    </div>
+                `;
+            });
+
+            historyContent.innerHTML = historyHTML;
+        }
+
+        // Load history when page loads
+        window.addEventListener('load', loadOrderHistory);
+
+        // Navigate to contact section
+        function navigateToContact(event) {
+            event.preventDefault();
+            window.location.href = 'index.html#contact-form';
+        }
+
+        // Cart functions
+        function addToCart(name, price) {
+            let cart = JSON.parse(localStorage.getItem('foodCart')) || [];
+            const existingItem = cart.find(item => item.name === name);
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({ name, price, quantity: 1 });
+            }
+            localStorage.setItem('foodCart', JSON.stringify(cart));
+            updateCartCount();
+        }
+
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.textContent = message;
+            notification.style.cssText = 'position:fixed;top:140px;right:20px;background:#27ae60;color:white;padding:15px 25px;border-radius:8px;z-index:1001;font-weight:600;box-shadow:0 4px 15px rgba(0,0,0,0.2);';
+            document.body.appendChild(notification);
+            setTimeout(() => notification.remove(), 3000);
+        }
+
+        function updateCartCount() {
+            const cart = JSON.parse(localStorage.getItem('foodCart')) || [];
+            const count = cart.reduce((total, item) => total + item.quantity, 0);
+            // Note: cart count element might not exist on this page, but function is here for completeness
+        }
+
+        // History action functions
+        function reorderOrder(orderId) {
+            const orders = historyManager.getOrderHistory();
+            const order = orders.find(o => o.id === orderId);
+            if (order) {
+                order.items.forEach(item => {
+                    addToCart(item.name, item.price);
+                });
+                window.location.href = 'order.html';
+            }
+        }
+
+        function reorderItem(name, price) {
+            addToCart(name, price);
+            showNotification(name + ' added to cart!');
+        }
+
+        function cancelOrder(orderId) {
+            const orders = historyManager.getOrderHistory();
+            const orderIndex = orders.findIndex(o => o.id === orderId);
+            if (orderIndex !== -1) {
+                orders[orderIndex].status = 'Cancelled';
+                localStorage.setItem('orderHistory', JSON.stringify(orders));
+                loadOrderHistory();
+                showNotification('Order cancelled successfully!');
+            }
+        }
+    </script>
+</body>
+</html>

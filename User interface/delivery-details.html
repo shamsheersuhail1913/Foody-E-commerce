@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delivery Details - Foody</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍽️</text></svg>" type="image/svg+xml">
+    <style>
+        * { -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; }
+        .delivery-container { max-width: 600px; margin: 0 auto; padding: 100px 20px 50px; }
+        .delivery-header { text-align: center; margin-bottom: 40px; }
+        .delivery-title { font-size: 2.5rem; font-weight: 700; color: #2c3e50; margin-bottom: 10px; }
+        .delivery-subtitle { font-size: 1.1rem; color: #7f8c8d; }
+        .form-container { background: white; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); padding: 30px; }
+        .form-group { margin-bottom: 25px; }
+        .form-label { display: block; font-weight: 600; color: #2c3e50; margin-bottom: 8px; font-size: 1rem; }
+        .form-input { width: 100%; padding: 12px 15px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1rem; transition: border-color 0.3s; }
+        .form-input:focus { outline: none; border-color: #3498db; }
+        .form-textarea { width: 100%; padding: 12px 15px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1rem; min-height: 80px; resize: vertical; transition: border-color 0.3s; }
+        .form-textarea:focus { outline: none; border-color: #3498db; }
+        .payment-options { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; }
+        .payment-option { border: 2px solid #e0e0e0; border-radius: 8px; padding: 15px; text-align: center; cursor: pointer; transition: all 0.3s; }
+        .payment-option:hover { border-color: #3498db; }
+        .payment-option.selected { border-color: #27ae60; background: #f8fff8; }
+        .payment-icon { font-size: 1.5rem; margin-bottom: 8px; }
+        .payment-text { font-weight: 600; color: #2c3e50; }
+        .order-summary { background: #f8f9fa; border-radius: 10px; padding: 20px; margin-bottom: 25px; }
+        .summary-title { font-weight: 600; color: #2c3e50; margin-bottom: 15px; }
+        .summary-item { display: flex; justify-content: space-between; margin-bottom: 8px; }
+        .summary-total { display: flex; justify-content: space-between; font-weight: 700; font-size: 1.2rem; color: #e74c3c; border-top: 1px solid #ddd; padding-top: 10px; margin-top: 10px; }
+        .btn-group { display: flex; gap: 15px; justify-content: center; }
+        .btn { padding: 15px 30px; border-radius: 25px; font-size: 1.1rem; font-weight: 600; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 10px; transition: all 0.3s; border: none; }
+        .btn-primary { background: #27ae60; color: white; }
+        .btn-primary:hover { background: #219a52; }
+        .btn-secondary { background: #95a5a6; color: white; }
+        .btn-secondary:hover { background: #7f8c8d; }
+        .error-message { color: #e74c3c; font-size: 0.9rem; margin-top: 5px; display: none; }
+    </style>
+</head>
+<body>
+    <div class="delivery-container">
+        <div class="delivery-header">
+            <h1 class="delivery-title">Delivery Details</h1>
+            <p class="delivery-subtitle">Please provide your delivery information</p>
+        </div>
+
+        <div class="form-container">
+            <div class="order-summary">
+                <div class="summary-title">Order Summary</div>
+                <div id="orderSummary"></div>
+            </div>
+
+            <form id="deliveryForm">
+                <div class="form-group">
+                    <label class="form-label" for="fullName">Full Name *</label>
+                    <input type="text" id="fullName" class="form-input" required>
+                    <div class="error-message" id="nameError">Please enter your full name</div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="phone">Phone Number *</label>
+                    <input type="tel" id="phone" class="form-input" placeholder="10-digit mobile number" required>
+                    <div class="error-message" id="phoneError">Please enter a valid 10-digit phone number</div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="address">Delivery Address *</label>
+                    <textarea id="address" class="form-textarea" placeholder="House/Flat No, Street, Area, Landmark" required></textarea>
+                    <div class="error-message" id="addressError">Please enter your complete delivery address</div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Payment Method *</label>
+                    <div class="payment-options">
+                        <div class="payment-option" data-payment="cod">
+                            <div class="payment-icon">💵</div>
+                            <div class="payment-text">Cash on Delivery</div>
+                        </div>
+                        <div class="payment-option" data-payment="card">
+                            <div class="payment-icon">💳</div>
+                            <div class="payment-text">Credit/Debit Card</div>
+                        </div>
+                        <div class="payment-option" data-payment="upi">
+                            <div class="payment-icon">📱</div>
+                            <div class="payment-text">UPI Payment</div>
+                        </div>
+                    </div>
+                    <div class="error-message" id="paymentError">Please select a payment method</div>
+                </div>
+
+                <div class="btn-group">
+                    <button type="button" class="btn btn-secondary" onclick="window.location.href='order.html'">
+                        <i class="fas fa-arrow-left"></i> Back to Cart
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-check"></i> Confirm Order
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        document.addEventListener('selectstart', e => e.preventDefault());
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && (e.key === 'c' || e.key === 'x' || e.key === 'v' || e.key === 'a' || e.key === 's' || e.key === 'u')) {
+                e.preventDefault();
+            }
+            if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I')) {
+                e.preventDefault();
+            }
+        });
+
+        let selectedPayment = '';
+
+        // Load order summary
+        function loadOrderSummary() {
+            const orderData = JSON.parse(sessionStorage.getItem('checkoutOrder'));
+            if (!orderData) {
+                window.location.href = 'order.html';
+                return;
+            }
+
+            const summaryDiv = document.getElementById('orderSummary');
+            let summaryHTML = '';
+            
+            orderData.items.forEach(item => {
+                summaryHTML += `
+                    <div class="summary-item">
+                        <span>${item.name} x ${item.quantity}</span>
+                        <span>₹${item.price * item.quantity}</span>
+                    </div>
+                `;
+            });
+            
+            summaryHTML += `
+                <div class="summary-total">
+                    <span>Total Amount</span>
+                    <span>₹${orderData.total}</span>
+                </div>
+            `;
+            
+            summaryDiv.innerHTML = summaryHTML;
+        }
+
+        // Payment method selection
+        document.querySelectorAll('.payment-option').forEach(option => {
+            option.addEventListener('click', function() {
+                document.querySelectorAll('.payment-option').forEach(opt => opt.classList.remove('selected'));
+                this.classList.add('selected');
+                selectedPayment = this.dataset.payment;
+                document.getElementById('paymentError').style.display = 'none';
+            });
+        });
+
+        // Form validation
+        function validateForm() {
+            let isValid = true;
+            
+            const fullName = document.getElementById('fullName').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const address = document.getElementById('address').value.trim();
+            
+            // Name validation
+            if (!fullName) {
+                document.getElementById('nameError').style.display = 'block';
+                isValid = false;
+            } else {
+                document.getElementById('nameError').style.display = 'none';
+            }
+            
+            // Phone validation
+            const phoneRegex = /^[6-9]\d{9}$/;
+            if (!phone || !phoneRegex.test(phone)) {
+                document.getElementById('phoneError').style.display = 'block';
+                isValid = false;
+            } else {
+                document.getElementById('phoneError').style.display = 'none';
+            }
+            
+            // Address validation
+            if (!address || address.length < 10) {
+                document.getElementById('addressError').style.display = 'block';
+                isValid = false;
+            } else {
+                document.getElementById('addressError').style.display = 'none';
+            }
+            
+            // Payment method validation
+            if (!selectedPayment) {
+                document.getElementById('paymentError').style.display = 'block';
+                isValid = false;
+            } else {
+                document.getElementById('paymentError').style.display = 'none';
+            }
+            
+            return isValid;
+        }
+
+        // Form submission
+        document.getElementById('deliveryForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            if (!validateForm()) {
+                return;
+            }
+            
+            const orderData = JSON.parse(sessionStorage.getItem('checkoutOrder'));
+            const deliveryDetails = {
+                fullName: document.getElementById('fullName').value.trim(),
+                phone: document.getElementById('phone').value.trim(),
+                address: document.getElementById('address').value.trim(),
+                paymentMethod: selectedPayment
+            };
+            
+            // Store complete order data
+            const completeOrder = {
+                ...orderData,
+                deliveryDetails: deliveryDetails,
+                orderId: 'FD' + Date.now().toString().slice(-6),
+                orderTime: new Date().toISOString()
+            };
+            
+            sessionStorage.setItem('lastOrder', JSON.stringify(completeOrder));
+            sessionStorage.removeItem('checkoutOrder');
+            
+            // Redirect to confirmation page
+            window.location.href = 'order-confirmation.html';
+        });
+
+        // Load order summary on page load
+        loadOrderSummary();
+    </script>
+</body>
+</html>

@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Menu - Foody</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍽️</text></svg>" type="image/svg+xml">
+    <script src="history-manager.js"></script>
+    <style>
+        * { -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; }
+        .menu-container { max-width: 1200px; margin: 0 auto; padding: 120px 20px 60px; }
+        .menu-header { text-align: center; margin-bottom: 50px; }
+        .menu-title { font-size: 3rem; font-weight: 700; color: #2c3e50; margin-bottom: 15px; }
+        .menu-subtitle { font-size: 1.2rem; color: #7f8c8d; }
+        .menu-section { margin-bottom: 50px; }
+        .section-title { font-size: 2rem; font-weight: 600; color: #e74c3c; margin-bottom: 25px; border-bottom: 3px solid #e74c3c; padding-bottom: 10px; }
+        .menu-item { display: flex; align-items: center; padding: 20px; border-bottom: 1px solid #eee; gap: 20px; background: #fff; border-radius: 10px; margin-bottom: 15px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .menu-item:last-child { border-bottom: none; }
+        .item-image { width: 120px; height: 120px; border-radius: 10px; object-fit: cover; flex-shrink: 0; }
+        .item-info { flex: 1; }
+        .item-info h4 { margin: 0 0 8px 0; color: #2c3e50; font-size: 1.3rem; }
+        .item-info p { margin: 0; color: #7f8c8d; font-size: 1rem; line-height: 1.4; }
+        .item-price { font-size: 1.4rem; font-weight: 700; color: #e74c3c; margin-right: 20px; }
+        .add-to-cart-btn { background: linear-gradient(135deg, #27ae60, #229954); color: white; border: none; padding: 12px 30px; border-radius: 25px; cursor: pointer; font-size: 1rem; font-weight: 600; box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3); transition: all 0.3s ease; }
+        .add-to-cart-btn:hover { background: linear-gradient(135deg, #229954, #1e7e34); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(39, 174, 96, 0.4); }
+        .item-actions { display: flex; align-items: center; gap: 10px; margin-top: 12px; }
+        .back-btn { position: fixed; top: 80px; left: 25px; background: #e74c3c; color: white; border: none; padding: 15px 25px; border-radius: 30px; cursor: pointer; font-weight: 600; z-index: 1000; font-size: 1rem; }
+        .back-btn:hover { background: #c0392b; }
+        .cart-icon { position: fixed; top: 25px; right: 25px; background: #e74c3c; color: white; border: none; padding: 18px; border-radius: 50%; cursor: pointer; font-size: 22px; z-index: 1000; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+        .cart-icon:hover { background: #c0392b; }
+        .cart-count { position: absolute; top: -8px; right: -8px; background: #fff; color: #e74c3c; border-radius: 50%; width: 24px; height: 24px; font-size: 13px; display: flex; align-items: center; justify-content: center; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <i class="fas fa-utensils"></i>
+                <span>Foody</span>
+            </div>
+            <nav class="nav">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="view-menu.html" class="nav-link active">Menu</a>
+                <a href="table-booking.html" class="nav-link">Book Table</a>
+                <a href="index.html#features" class="nav-link">Features</a>
+                <div class="nav-dropdown">
+                    <a href="#" class="nav-link">History <i class="fas fa-chevron-down"></i></a>
+                    <div class="dropdown-content">
+                        <a href="history.html">Food Orders</a>
+                        <a href="table-history.html">Table Bookings</a>
+                    </div>
+                </div>
+                <a href="index.html#contact-form" class="nav-link">Contact</a>
+            </nav>
+            <button class="mobile-menu-btn">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </header>
+
+    <button class="back-btn" onclick="window.location.href='index.html'">
+        <i class="fas fa-arrow-left"></i> Back to Home
+    </button>
+
+    <div class="menu-container">
+        <div class="menu-header">
+            <h1 class="menu-title">Menu</h1>
+            <p class="menu-subtitle">All our delicious items at a glance</p>
+        </div>
+
+        <div class="menu-section">
+            <h2 class="section-title">Starters</h2>
+            <div class="menu-item">
+                <img src="https://www.cookwithmanali.com/wp-content/uploads/2015/07/Restaurant-Style-Recipe-Paneer-Tikka-480x270.jpg" alt="Paneer Tikka" class="item-image">
+                <div class="item-info">
+                    <h4>Paneer Tikka</h4>
+                    <p>Grilled cottage cheese marinated in aromatic spices and herbs</p>
+                </div>
+                <div class="item-price">₹220</div>
+                <div class="item-actions">
+                    <button class="add-to-cart-btn" onclick="addToCart('Paneer Tikka', 220)">
+                        <i class="fas fa-plus"></i> Add to Cart
+                    </button>
+                </div>
+            </div>
+            <div class="menu-item">
+                <img src="https://images.unsplash.com/photo-1601050690597-df0568f70950?w=200&h=200&fit=crop" alt="Veg Samosa" class="item-image">
+                <div class="item-info">
+                    <h4>Veg Samosa (2 pcs)</h4>
+                    <p>Crispy pastry filled with spiced potatoes and vegetables</p>
+                </div>
+                <div class="item-price">₹80</div>
+                <div class="item-actions">
+                    <button class="add-to-cart-btn" onclick="addToCart('Veg Samosa (2 pcs)', 80)">
+                        <i class="fas fa-plus"></i> Add to Cart
+                    </button>
+                </div>
+            </div>
+            <div class="menu-item">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSfpV7d_PfUsjROveUwhCCjYRqHzUo5TxYZhA&s" alt="Hara Bhara Kabab" class="item-image">
+                <div class="item-info">
+                    <h4>Hara Bhara Kabab</h4>
+                    <p>Green vegetable patties made with spinach and green peas</p>
+                </div>
+                <div class="item-price">₹180</div>
+                <div class="item-actions">
+                    <button class="add-to-cart-btn" onclick="addToCart('Hara Bhara Kabab', 180)">
+                        <i class="fas fa-plus"></i> Add to Cart
+                    </button>
+                </div>
+            </div>
+            <div class="menu-item">
+                <img src="https://images.unsplash.com/photo-1496116218417-1a781b1c416c?w=400&h=200&fit=crop" alt="Tandoori Momos" class="item-image">
+                <div class="item-info">
+                    <h4>Tandoori Momos</h4>
+                    <p>Steamed dumplings grilled in tandoor with spicy marinade</p>
+                </div>
+                <div class="item-price">₹160</div>
+                <div class="item-actions">
+                    <button class="add-to-cart-btn" onclick="addToCart('Tandoori Momos', 160)">
+                        <i class="fas fa-plus"></i> Add to Cart
+                    </button>
+                </div>
+            </div>
+            <div class="menu-item">
+                <img src="https://www.dillandthyme.com/wp-content/uploads/2023/03/Crispy-Corn-Chaat-FI.jpg" alt="Crispy Corn" class="item-image">
+                <div class="item-info">
+                    <h4>Crispy Corn</h4>
+                    <p>Golden fried corn kernels tossed with spices</p>
+                </div>
+                <div class="item-price">₹140</div>
+                <div class="item-actions">
+                    <button class="add-to-cart-btn" onclick="addToCart('Crispy Corn', 140)">
+                        <i class="fas fa-plus"></i> Add to Cart
+                    </button>
+                </div>
+            </div>
+            <div class="menu-item">
+                <img src="https://palatesdesire.com/wp-content/uploads/2022/09/dry-gobi-manchurian-recipe@palates-desire.jpg" alt="Gobi Manchurian" class="item-image">
+                <div class="item-info">
+                    <h4>Gobi Manchurian</h4>
+                    <p>Crispy cauliflower florets in tangy Indo-Chinese sauce</p>
+                </div>
+                <div class="item-price">₹180</div>
+                <div class="item-actions">
+                    <button class="add-to-cart-btn" onclick="addToCart('Gobi Manchurian', 180)">
+                        <i class="fas fa-plus"></i> Add to Cart
+                    </button>
+                </div>
+            </div>
+            <div class="menu-item">
+                <img src="https://spiceit.in/wp-content/uploads/2022/05/paneer-chilli-dry.jpg" alt="Paneer Chilli Dry" class="item-image">
+                <div class="item-info">
+                    <h4>Paneer Chilli Dry</h4>
+                    <p>Dry paneer cubes tossed with bell peppers and onions</p>
+                </div>
+                <div class="item-price">₹220</div>
+                <div class="item-actions">
+                    <button class="add-to-cart-btn" onclick="addToCart('Paneer Chilli Dry', 220)">
+                        <i class="fas fa-plus"></i> Add to Cart
+                    </button>
+                </div>
+            </div>
+            <div class="menu-item">
+                <img src="https://images.unsplash.com/photo-1567620832903-9fc6debc209f?w=400&h=200&fit=crop" alt="Chicken 65" class="item-image">
+                <div class="item-info">
+                    <h4>Chicken 65</h4>
+                    <p>Spicy deep-fried chicken pieces with South Indian flavors</p>
+                </div>
+                <div class="item-price">₹260</div>
+                <div class="item-actions">
+                    <button class="add-to-cart-btn" onclick="addToCart('Chicken 65', 260)">
+                        <i class="fas fa-plus"></i> Add to Cart
+                    </button>
+                </div>
+            </div>
+            <div class="menu-item">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTh2JszlxQ7XuaucmgcgVJ4MnUVs_PGItK5-A&s" alt="Fish Fingers" class="item-image">
+                <div class="item-info">
+                    <h4>Fish Fingers</h4>
+                    <p>Crispy battered fish strips served with tangy sauce</p>
+                </div>
+                <div class="item-price">₹300</div>
+                <div class="item-actions">
+                    <button class="add-to-cart-btn" onclick="addToCart('Fish Fingers', 300)">
+                        <i class="fas fa-plus"></i> Add to Cart
+                    </button>
+                </div>
+            </div>
+            <div class="menu-item">
+                <img src="https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?w=400&h=200&fit=crop" alt="Murg Malai Tikka" class="item-image">
+                <div class="item-info">
+                    <h4>Murg Malai Tikka</h4>
+                    <p>Tender chicken pieces marinated in cream and mild spices</p>
+                </div>
+                <div class="item-price">₹280</div>
+                <div class="item-actions">
+                    <button class="add-to-cart-btn" onclick="addToCart('Murg Malai Tikka', 280)">
+                        <i class="fas fa-plus"></i> Add to Cart
+                    </button>
+                </div>
+            </div>
+            <div class="menu-item">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQEgAtrinlnlAFg1jvyspOO2uW37LS7UU-HWw&s" alt="Chicken Manchurian" class="item-image">
+                <div class="item-info">
+                    <h4>Chicken Manchurian</h4>
+                    <p>Tender chicken pieces in spicy Manchurian sauce</p>
+                </div>
+                <div class="item-price">₹240</div>
+                <div class="item-actions">
+                    <button class="add-to-cart-btn" onclick="addToCart('Chicken Manchurian', 240)">
+                        <i class="fas fa-plus"></i> Add to Cart
+                    </button>
+                </div>
+            </div>
+            <div class="menu-item">
+                <img src="https://thefusionarycook.com/wp-content/uploads/2025/06/prawn-koliwada.jpg" alt="Prawn Koliwada" class="item-image">
+                <div class="item-info">
+                    <h4>Prawn Koliwada</h4>
+                    <p>Crispy fried prawns with coastal spices</p>
+                </div>
+                <div class="item-price">₹350</div>
+                <div class="item-actions">
+                    <button class="add-to-cart-btn" onclick="addToCart('Prawn Koliwada', 350)">
+                        <i class="fas fa-plus"></i> Add to Cart
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="menu-section">
+            <h2 class="section-title">Veg</h2>
+            <div class="menu-item">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQpu92KfdTKHEESa6YsfT-8xIxi3TXGdx7CCw&s" alt="Kadai Paneer" class="item-image">
+                <div class="item-info">
+                    <h4>Kadai Paneer</h4>
+                    <p>Paneer cooked with bell peppers in spicy tomato gravy</p>
+                </div>
+                <div class="item-price">₹250</div>
+                <div class="item-actions">
+                    <button class="add-to-cart-btn" onclick="addToCart('Kadai Paneer', 250)">
+                        <i class="fas fa-plus"></i> Add to Cart
+                    </button>
+                </div>
+            </div>
+            <div class="menu-item">
+                <img src="https://vismaifood.com/storage/app/uploads/public/ed3/817/fa2/thumb__1200_0_0_0_auto.jpg" alt="Mix Veg Curry" class="item-image">
+                <div class="item-info">
+                    <h4>Mix Veg Curry</h4>
+                    <p>Assorted vegetables cooked in flavorful curry sauce</p>
+                </div>
+                <div class="item-price">₹190</div>
+                <div class="item-actions">
+                    <button class="add-to-cart-btn" onclick="addToCart('Mix Veg Curry', 190)">
+                        <i class="fas fa-plus"></i> Add to Cart
+                    </button>
+                </div>
+            </div>
+            <div class="menu-item">
+                <img src="https://carameltintedlife.com/wp-content/uploads/2020/11/Malai-Kofta-1-of-1-9.jpg" alt="Malai Kofta" class="item-image">
+                <div class="item-info">
+                    <h4>Malai Kofta</h4>
+                    <p>Deep-fried vegetable balls in rich creamy gravy</p>
+                </div>
+                <div class="item-price">₹240</div>
+                <div class="item-actions">
+                    <button class="add-to-cart-btn" onclick="addToCart('Malai Kofta', 240)">
+                        <i class="fas fa-plus"></i> Add to Cart
+                    </button>
+                </div>
+            </div>
+            <div class="menu-item">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQE26YmX5Bb1Bx06QqkB9kgPHpA1IgB7ta6Ag&s" alt="Jeera Aloo" class="item-image">
+                <div class="item-info">
+                    <h4>Jeera Aloo</h4>
+                    <p>Cumin-flavored potatoes with aromatic spices</p>
+                </div>
+                <div class="item-price">₹150</div>
+                <div class="item-actions">
+                    <button class="add-to-cart-btn" onclick="addToCart('Jeera Aloo', 150)">
+                        <i class="fas fa-plus"></i> Add to Cart
+                    </button>
+                </div>
+            </div>
+            <div class="menu-item">
+                <img src="https://myfoodstory.com/wp-content/uploads/2022/04/Veg-Kolhapuri-3.jpg" alt="Veg Kolhapuri" class="item-image">
+                <div class="item-info">
+                    <h4>Veg Kolhapuri</h4>
+                    <p>Spicy Maharashtrian-style mixed vegetable curry</p>
+                </div>
+                <div class="item-price">₹220</div>
+                <div class="item-actions">
+                    <button class="add-to-cart-btn" onclick="addToCart('Veg Kolhapuri', 220)">
+                        <i class="fas fa-plus"></i> Add to Cart
+                    </button>
+                </div>
+            </div>
+            <div class="menu-item">
+                <img src="https://static.toiimg.com/photo/75534551.cms" alt="Mushroom Masala" class="item-image">
+                <div class="item-info">
+                    <h4>Mushroom Masala</h4>
+                    <p>Fresh mushrooms cooked in spicy onion-tomato gravy</p>
+                </div>
+                <div class="item-price">₹240</div>
+                <div class="item-actions">
+                    <button class="add-to-cart-btn" onclick="addToCart('Mushroom Masala', 240)">
+                        <i class="fas fa-plus"></i> Add to Cart
+                    </button>
+                </div>
+            </div>
+            <div class="menu-item">
+                <img src="https://s3-ap-south-1.amazonaws.com/betterbutterbucket-silver/alaka-jena149562528759256e4698d5b.jpeg" alt="Veg Handi" class="item-image">
+                <div class="item-info">
+                    <h4>Veg Handi</h4>
+                    <p>Mixed vegetables cooked in traditional clay pot style</p>
+                </div>
+                <div class="item-price">₹230</div>
+                <div class="item-actions">
+                    <button class="add-to-cart-btn" onclick="addToCart('Veg Handi', 230)">
+                        <i class="fas fa-plus"></i> Add to Cart
+                    </button>
+                </div>
+            </div>
+            <div class="menu-item">
+                <img src="https://i.pinimg.com/736x/c6/3b/39/c63b391025f3ae6cdf6cefa1ddd0e798.jpg" alt="Paneer Lababdar" class="item-image">
+                <div class="item-info">
+                    <h4>Paneer Lababdar</h4>
+                    <p>Rich paneer curry with cashews and aromatic spices</p>
+                </div>
+                <div class="item-price">₹270</div>
+                <div class="item-actions">
+                    <button class="add-to-cart-btn" onclick="addToCart('Paneer Lababdar', 270)">
+                        <i class="fas fa-plus"></i> Add to Cart
+                    </button>
+                </div>
+            </div>
+            <div class="menu-item">
+                <img src="https://myfoodstory.com/wp-content/uploads/2021/07/restaurant-style-paneer-butter-masala-2-500x500.jpg" alt="Paneer Butter Masala" class="item-image">
+                <div class="item-info">
+                    <h4>Paneer Butter Masala</h4>
+                    <p>Creamy paneer curry in rich tomato-butter sauce</p>
+                </div>
+                <div class="item-price">₹260</div>
+                <div class="item-actions">
+                    <button class="add-to-cart-btn" onclick="addToCart('Paneer Butter Masala', 260)">
+                        <i class="fas fa-plus"></i> Add to Cart
+                    </button>
+                </div>
+            </div>
+            <div class="menu-item">
+                <img src="https://www.scrumptiously.com/wp-content/uploads/2024/10/MoongDalTadka.webp" alt="Dal Makhani" class="item-image">
+                <div class="item-info">
+                    <h4>Dal Makhani</h4>
+                    <p>Creamy black lentils cooked with butter and spices</p>
+                </div>
+                <div class="item-price">₹200</div>
+                <div class="item-actions">
+                    <button class="add-to-cart-btn" onclick="addToCart('Dal Makhani', 200)">
+                        <i class="fas fa-plus"></i> Add to Cart
+                    </button>
+                </div>
+            </div>
+            <div class="menu-item">
+                <img src="https://www.indianveggiedelight.com/wp-content/uploads/2017/10/palak-paneer-recipe-featured.jpg" alt="Palak Paneer" class="item-image">
+                <div class="item-info">
+                    <h4>Palak Paneer</h4>
+                    <p>Cottage cheese cubes in creamy spinach gravy</p>
+                </div>
+                <div class="item-price">₹240</div>
+                <div class="item-actions">
+                    <button class="add-to-cart-btn" onclick="addToCart('Palak Paneer', 240)">
+                        <i class="fas fa-plus"></i> Add to Cart
+                    </button>
+                </div>
+            </div>
+            <div class="menu-item">
+                <img src="https://ministryofcurry.com/wp-content/uploads/2017/04/Aloo-Gobi-5-500x500.jpg" alt="Aloo Gobi" class="item-image">
+                <div class="item-info">
+                    <h4>Aloo Gobi</h4>
+                    <p>Dry curry of potatoes and cauliflower with spices</p>
+                </div>
+                <div class="item-price">₹180</div>
+                <div class="item-actions">
+                    <button class="add-to-cart-btn" onclick="addToCart('Aloo Gobi', 180)">
+                        <i class="fas fa-plus"></i> Add to Cart
+                    </button>
+                </div>
+            </div>
+            <div class="menu-item">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/9/9e/Chole_Bhature_from_Nagpur.JPG" alt="Chole Bhature" class="item-image">
+                <div class="item-info">
+                    <h4>Chole Bhature</h4>
+                    <p>Spicy chickpea curry served with fried bread</p>
+                </div>
+                <div class="item-price">₹220</div>
+                <div class="item-actions">
+                    <button class="add-to-cart-btn" onclick="addToCart('Chole Bhature', 220)">
+                        <i class="fas fa-plus"></i> Add to Cart
+                    </button>
+                </div>
+            </div>
+            <div class="menu-item">
+                <img src="https://i.ytimg.com/vi/Do7ZdUodDdw/maxresdefault.jpg" alt="Veg Biryani" class="item-image">
+                <div class="item-info">
+                    <h4>Veg Biryani</h4>
+                    <p>Fragrant basmati rice with mixed vegetables and spices</p>
+                </div>
+                <div class="item-price">₹280</div>
+                <div class="item-actions">
+                    <button class="add-to-cart-btn" onclick="addToCart('Veg Biryani', 280)">
+                        <i class="fas fa-plus"></i> Add to Cart
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="menu-section">
+            <h2 class="section-title">Non-Veg</h2>
+            <div class="menu-item">
+                <img src="https://static.toiimg.com/photo/63201465.cms" alt="Rogan Josh" class="item-image">
+                <div class="item-info">
+                    <h4>Rogan Josh</h4>
+                    <p>Kashmiri-style mutton curry with aromatic spices</p>
+                </div>
+                <div class="item-price">₹380</div>
+                <div class="item-actions">
+                    <button class="add-to-cart-btn" onclick="addToCart('Rogan Josh', 380)">
+                        <i class="fas fa-plus"></i> Add to Cart
+                    </button>
+                </div>
+            </div>
+            <div class="menu-item">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRkmOKogYC-nhKy3wcnspsgz1feQn3WZ8IZ1g&s" alt="Fish Curry" class="item-image">
+                <div class="item-info">
+                    <h4>Fish Curry</h4>
+                    <p>Fresh fish cooked in coconut-based spicy curry</p>
+                </div>
+                <div class="item-price">₹340</div>
+                <div class="item-actions">
+                    <button class="add-to-cart-btn" onclick="addToCart('Fish Curry', 340)">
+                        <i class="fas fa-plus"></i> Add to Cart
+                    </button>
+                </div>
+            </div>
+            <div class="menu-item">
+                <img src="https://www.cubesnjuliennes.com/wp-content/uploads/2022/12/Tandoori-Chicken-Recipe.jpg" alt="Tandoori Chicken" class="item-image">
+                <div class="item-info">
+                    <h4>Tandoori Chicken (Half)</h4>
+                    <p>Clay oven roasted chicken marinated in yogurt and spices</p>
+                </div>
+                <div class="item-price">₹360</div>
+                <div class="item-actions">
+                    <button class="add-to-cart-btn" onclick="addToCart('Tandoori Chicken (Half)', 360)">
+                        <i class="fas fa-plus"></i> Add to Cart
+                    </button>
+                </div>
+            </div>
+            <div class="menu-item">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTi5KGJ_xT3pW7hqDxVRHAefnAeTAGBMabAPA&s" alt="Prawn Masala" class="item-image">
+                <div class="item-info">
+                    <h4>Prawn Masala</h4>
+                    <p>Juicy prawns cooked in spicy onion-tomato gravy</p>
+                </div>
+                <div class="item-price">₹380</div>
+                <div class="item-actions">
+                    <button class="add-to-cart-btn" onclick="addToCart('Prawn Masala', 380)">
+                        <i class="fas fa-plus"></i> Add to Cart
+                    </button>
+                </div>
+            </div>
+            <div class="menu-item">
+                <img src="https://www.chefadora.com/_next/image?url=https%3A%2F%2Fchefadora.b-cdn.net%2Fmedium_Gemini_Generated_Image_fklym8fklym8fkly_e5530149e2.jpeg&w=3840&q=75" alt="Chicken Tikka Masala" class="item-image">
+                <div class="item-info">
+                    <h4>Chicken Tikka Masala</h4>
+                    <p>Grilled chicken tikka in rich tomato-cream sauce</p>
+                </div>
+                <div class="item-price">₹300</div>
+                <div class="item-actions">
+                    <button class="add-to-cart-btn" onclick="addToCart('Chicken Tikka Masala', 300)">
+                        <i class="fas fa-plus"></i> Add to Cart
+                    </button>
+                </div>
+            </div>
+            <div class="menu-item">
+                <img src="https://cdn.jwplayer.com/v2/media/cU6PAcy8/poster.jpg?width=1920" alt="Egg Curry" class="item-image">
+                <div class="item-info">
+                    <h4>Egg Curry</h4>
+                    <p>Boiled eggs cooked in spicy onion-tomato gravy</p>
+                </div>
+                <div class="item-price">₹150</div>
+                <div class="item-actions">
+                    <button class="add-to-cart-btn" onclick="addToCart('Egg Curry', 150)">
+                        <i class="fas fa-plus"></i> Add to Cart
+                    </button>
+                </div>
+            </div>
+            <div class="menu-item">
+                <img src="https://www.licious.in/blog/wp-content/uploads/2022/06/mutton-hyderabadi-biryani-01.jpg" alt="Mutton Biryani" class="item-image">
+                <div class="item-info">
+                    <h4>Mutton Biryani</h4>
+                    <p>Fragrant basmati rice with tender mutton and aromatic spices</p>
+                </div>
+                <div class="item-price">₹400</div>
+                <div class="item-actions">
+                    <button class="add-to-cart-btn" onclick="addToCart('Mutton Biryani', 400)">
+                        <i class="fas fa-plus"></i> Add to Cart
+                    </button>
+                </div>
+            </div>
+            <div class="menu-item">
+                <img src="https://i.ndtvimg.com/i/2016-10/chicken-korma_650x400_51475662188.jpg" alt="Chicken Korma" class="item-image">
+                <div class="item-info">
+                    <h4>Chicken Korma</h4>
+                    <p>Mild chicken curry cooked in cashew and yogurt gravy</p>
+                </div>
+                <div class="item-price">₹290</div>
+                <div class="item-actions">
+                    <button class="add-to-cart-btn" onclick="addToCart('Chicken Korma', 290)">
+                        <i class="fas fa-plus"></i> Add to Cart
+                    </button>
+                </div>
+            </div>
+            <div class="menu-item">
+                <img src="https://www.thetakeiteasychef.com/wp-content/uploads/2017/12/KFF-FI1-Compressed.jpg" alt="Kerala Fish Fry" class="item-image">
+                <div class="item-info">
+                    <h4>Kerala Fish Fry</h4>
+                    <p>Crispy fried fish marinated with Kerala spices</p>
+                </div>
+                <div class="item-price">₹350</div>
+                <div class="item-actions">
+                    <button class="add-to-cart-btn" onclick="addToCart('Kerala Fish Fry', 350)">
+                        <i class="fas fa-plus"></i> Add to Cart
+                    </button>
+                </div>
+            </div>
+            <div class="menu-item">
+                <img src="https://www.licious.in/blog/wp-content/uploads/2020/12/Crab-Curry.jpg" alt="Crab Masala" class="item-image">
+                <div class="item-info">
+                    <h4>Crab Masala</h4>
+                    <p>Fresh crab cooked in spicy coastal-style masala</p>
+                </div>
+                <div class="item-price">₹420</div>
+                <div class="item-actions">
+                    <button class="add-to-cart-btn" onclick="addToCart('Crab Masala', 420)">
+                        <i class="fas fa-plus"></i> Add to Cart
+                    </button>
+                </div>
+            </div>
+            <div class="menu-item">
+                <img src="https://bellyfull.net/wp-content/uploads/2022/08/Butter-Chicken-blog-1.jpg" alt="Butter Chicken" class="item-image">
+                <div class="item-info">
+                    <h4>Butter Chicken</h4>
+                    <p>Tender chicken in rich creamy tomato-butter sauce</p>
+                </div>
+                <div class="item-price">₹320</div>
+                <div class="item-actions">
+                    <button class="add-to-cart-btn" onclick="addToCart('Butter Chicken', 320)">
+                        <i class="fas fa-plus"></i> Add to Cart
+                    </button>
+                </div>
+            </div>
+            <div class="menu-item">
+                <img src="https://www.thehosteller.com/_next/image?url=https%3A%2F%2Fimages.thehosteller.com%2Ftr%3Aw-1200%2Cq-60%2Fdpr-1%2Fhosteller-blog%2F2023%2F08%2F25%2F1692952800-Hyderabadi-Chicken-Biryani.jpg&w=1920&q=75" alt="Hyderabadi Chicken Biryani" class="item-image">
+                <div class="item-info">
+                    <h4>Hyderabadi Chicken Biryani</h4>
+                    <p>Authentic Hyderabadi-style chicken biryani with aromatic spices</p>
+                </div>
+                <div class="item-price">₹380</div>
+                <div class="item-actions">
+                    <button class="add-to-cart-btn" onclick="addToCart('Hyderabadi Chicken Biryani', 380)">
+                        <i class="fas fa-plus"></i> Add to Cart
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="menu-section">
+            <h2 class="section-title">Ice-Creams</h2>
+            <div class="menu-item">
+                <img src="https://www.sharmispassions.com/wp-content/uploads/2014/05/mango-kulfi7.jpg" alt="Pista Kulfi" class="item-image">
+                <div class="item-info">
+                    <h4>Pista Kulfi</h4>
+                    <p>Traditional Indian frozen dessert with pistachios</p>
+                </div>
+                <div class="item-price">₹90</div>
+                <div class="item-actions">
+                    <button class="add-to-cart-btn" onclick="addToCart('Pista Kulfi', 90)">
+                        <i class="fas fa-plus"></i> Add to Cart
+                    </button>
+                </div>
+            </div>
+            <div class="menu-item">
+                <img src="https://www.milkmaid.in/sites/default/files/2022-12/Chocolate-Ice-Cream-335x300.jpg" alt="Chocolate Scoop" class="item-image">
+                <div class="item-info">
+                    <h4>Chocolate Scoop</h4>
+                    <p>Rich and creamy chocolate ice cream</p>
+                </div>
+                <div class="item-price">₹60</div>
+                <div class="item-actions">
+                    <button class="add-to-cart-btn" onclick="addToCart('Chocolate Scoop', 60)">
+                        <i class="fas fa-plus"></i> Add to Cart
+                    </button>
+                </div>
+            </div>
+            <div class="menu-item">
+                <img src="https://thumbs.dreamstime.com/b/creamy-butterscotch-ice-cream-bowl-spoon-serving-indulgent-dessert-option-362792590.jpg" alt="Butterscotch Scoop" class="item-image">
+                <div class="item-info">
+                    <h4>Butterscotch Scoop</h4>
+                    <p>Creamy butterscotch flavored ice cream with caramel bits</p>
+                </div>
+                <div class="item-price">₹65</div>
+                <div class="item-actions">
+                    <button class="add-to-cart-btn" onclick="addToCart('Butterscotch Scoop', 65)">
+                        <i class="fas fa-plus"></i> Add to Cart
+                    </button>
+                </div>
+            </div>
+            <div class="menu-item">
+                <img src="https://5.imimg.com/data5/SELLER/Default/2025/5/511440656/FI/EL/GV/37776596/kesar-pista-ice-cream-500x500.png" alt="Kesar Pista Ice Cream" class="item-image">
+                <div class="item-info">
+                    <h4>Kesar Pista Ice Cream</h4>
+                    <p>Saffron and pistachio flavored premium ice cream</p>
+                </div>
+                <div class="item-price">₹80</div>
+                <div class="item-actions">
+                    <button class="add-to-cart-btn" onclick="addToCart('Kesar Pista Ice Cream', 80)">
+                        <i class="fas fa-plus"></i> Add to Cart
+                    </button>
+                </div>
+            </div>
+            <div class="menu-item">
+                <img src="https://5.imimg.com/data5/EM/EG/BW/SELLER-9521221/malai-matka-kulfi-ice-cream-500x500.jpg" alt="Matka Kulfi" class="item-image">
+                <div class="item-info">
+                    <h4>Matka Kulfi</h4>
+                    <p>Traditional kulfi served in earthen pot</p>
+                </div>
+                <div class="item-price">₹120</div>
+                <div class="item-actions">
+                    <button class="add-to-cart-btn" onclick="addToCart('Matka Kulfi', 120)">
+                        <i class="fas fa-plus"></i> Add to Cart
+                    </button>
+                </div>
+            </div>
+            <div class="menu-item">
+                <img src="https://myfoodstory.com/wp-content/uploads/2020/11/Classic-Cassata-Upgraded-4.jpg" alt="Cassata Slice" class="item-image">
+                <div class="item-info">
+                    <h4>Cassata Slice</h4>
+                    <p>Layered ice cream cake with nuts and fruits</p>
+                </div>
+                <div class="item-price">₹90</div>
+                <div class="item-actions">
+                    <button class="add-to-cart-btn" onclick="addToCart('Cassata Slice', 90)">
+                        <i class="fas fa-plus"></i> Add to Cart
+                    </button>
+                </div>
+            </div>
+            <div class="menu-item">
+                <img src="https://theflavourtrailbydivya.wordpress.com/wp-content/uploads/2020/06/img_3117.jpg?w=816" alt="Tender Coconut Ice Cream" class="item-image">
+                <div class="item-info">
+                    <h4>Tender Coconut Ice Cream</h4>
+                    <p>Fresh coconut flavored ice cream with coconut pieces</p>
+                </div>
+                <div class="item-price">₹100</div>
+                <div class="item-actions">
+                    <button class="add-to-cart-btn" onclick="addToCart('Tender Coconut Ice Cream', 100)">
+                        <i class="fas fa-plus"></i> Add to Cart
+                    </button>
+                </div>
+            </div>
+            <div class="menu-item">
+                <img src="https://rakskitchen.net/wp-content/uploads/2015/05/17362127519_8c1a24c279_z.jpg" alt="Rose Falooda" class="item-image">
+                <div class="item-info">
+                    <h4>Rose Falooda</h4>
+                    <p>Rose flavored milk drink with vermicelli and ice cream</p>
+                </div>
+                <div class="item-price">₹150</div>
+                <div class="item-actions">
+                    <button class="add-to-cart-btn" onclick="addToCart('Rose Falooda', 150)">
+                        <i class="fas fa-plus"></i> Add to Cart
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="menu-section">
+            <h2 class="section-title">Beverages</h2>
+            <div class="menu-item">
+                <img src="https://sidapur.com/cdn/shop/products/Edit_DSC_0033_88b88cbb-06c3-4526-a888-0f441dbcb37d_1100x.jpg?v=1636284130" alt="Filter Coffee" class="item-image">
+                <div class="item-info">
+                    <h4>Filter Coffee</h4>
+                    <p>South Indian style filtered coffee with milk</p>
+                </div>
+                <div class="item-price">₹50</div>
+                <div class="item-actions">
+                    <button class="add-to-cart-btn" onclick="addToCart('Filter Coffee', 50)">
+                        <i class="fas fa-plus"></i> Add to Cart
+                    </button>
+                </div>
+            </div>
+            <div class="menu-item">
+                <img src="https://thumbs.dreamstime.com/b/glass-nimbu-pani-refreshing-drink-made-lemon-sugar-water-garnished-mint-leaves-ice-isolated-clean-white-372711746.jpg" alt="Nimbu Pani" class="item-image">
+                <div class="item-info">
+                    <h4>Nimbu Pani</h4>
+                    <p>Fresh lime water with mint and spices</p>
+                </div>
+                <div class="item-price">₹60</div>
+                <div class="item-actions">
+                    <button class="add-to-cart-btn" onclick="addToCart('Nimbu Pani', 60)">
+                        <i class="fas fa-plus"></i> Add to Cart
+                    </button>
+                </div>
+            </div>
+            <div class="menu-item">
+                <img src="https://lentillovingfamily.com/wp-content/uploads/2025/05/mango-lassi-2.jpg" alt="Mango Lassi" class="item-image">
+                <div class="item-info">
+                    <h4>Mango Lassi</h4>
+                    <p>Creamy yogurt drink blended with fresh mango</p>
+                </div>
+                <div class="item-price">₹100</div>
+                <div class="item-actions">
+                    <button class="add-to-cart-btn" onclick="addToCart('Mango Lassi', 100)">
+                        <i class="fas fa-plus"></i> Add to Cart
+                    </button>
+                </div>
+            </div>
+            <div class="menu-item">
+                <img src="https://thumbs.dreamstime.com/b/bottles-assorted-global-soft-drinks-poznan-poland-jan-drink-market-dominated-brands-few-multinational-companies-founded-84850971.jpg" alt="Soft Drinks" class="item-image">
+                <div class="item-info">
+                    <h4>Soft Drinks</h4>
+                    <p>Chilled carbonated beverages (Coke, Pepsi, Sprite)</p>
+                </div>
+                <div class="item-price">₹70</div>
+                <div class="item-actions">
+                    <button class="add-to-cart-btn" onclick="addToCart('Soft Drinks', 70)">
+                        <i class="fas fa-plus"></i> Add to Cart
+                    </button>
+                </div>
+            </div>
+            <div class="menu-item">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwb39dnHXFMWaZpGnWUWIvlUVgdsP40iDTUQ&s" alt="Cold Coffee" class="item-image">
+                <div class="item-info">
+                    <h4>Cold Coffee</h4>
+                    <p>Iced coffee blended with milk and ice cream</p>
+                </div>
+                <div class="item-price">₹110</div>
+                <div class="item-actions">
+                    <button class="add-to-cart-btn" onclick="addToCart('Cold Coffee', 110)">
+                        <i class="fas fa-plus"></i> Add to Cart
+                    </button>
+                </div>
+            </div>
+            <div class="menu-item">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTORTCfb3F9jbhbmp3JOjfpbeZSRaOfYGr2HA&s" alt="Jaljeera" class="item-image">
+                <div class="item-info">
+                    <h4>Jaljeera</h4>
+                    <p>Refreshing cumin-flavored drink with mint and spices</p>
+                </div>
+                <div class="item-price">₹50</div>
+                <div class="item-actions">
+                    <button class="add-to-cart-btn" onclick="addToCart('Jaljeera', 50)">
+                        <i class="fas fa-plus"></i> Add to Cart
+                    </button>
+                </div>
+            </div>
+            <div class="menu-item">
+                <img src="https://images.unsplash.com/photo-1544145945-f90425340c7e?w=400&h=200&fit=crop" alt="Badam Milk" class="item-image">
+                <div class="item-info">
+                    <h4>Badam Milk (hot/cold)</h4>
+                    <p>Almond flavored milk drink served hot or cold</p>
+                </div>
+                <div class="item-price">₹90</div>
+                <div class="item-actions">
+                    <button class="add-to-cart-btn" onclick="addToCart('Badam Milk (hot/cold)', 90)">
+                        <i class="fas fa-plus"></i> Add to Cart
+                    </button>
+                </div>
+            </div>
+            <div class="menu-item">
+                <img src="https://drinkdesoi.com/cdn/shop/articles/Blue_Lagoon_Mocktail_Recipe_1_2048x2048.webp?v=1732291310" alt="Blue Lagoon Mocktail" class="item-image">
+                <div class="item-info">
+                    <h4>Blue Lagoon Mocktail</h4>
+                    <p>Refreshing blue colored non-alcoholic cocktail</p>
+                </div>
+                <div class="item-price">₹140</div>
+                <div class="item-actions">
+                    <button class="add-to-cart-btn" onclick="addToCart('Blue Lagoon Mocktail', 140)">
+                        <i class="fas fa-plus"></i> Add to Cart
+                    </button>
+                </div>
+            </div>
+            <div class="menu-item">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQdeq_qps9RPo9qKXHRAXH5iQKSQtJO49c7qQ&s" alt="Fresh Lime Soda" class="item-image">
+                <div class="item-info">
+                    <h4>Fresh Lime Soda</h4>
+                    <p>Sparkling lime drink with fresh lime and soda</p>
+                </div>
+                <div class="item-price">₹70</div>
+                <div class="item-actions">
+                    <button class="add-to-cart-btn" onclick="addToCart('Fresh Lime Soda', 70)">
+                        <i class="fas fa-plus"></i> Add to Cart
+                    </button>
+                </div>
+            </div>
+            <div class="menu-item">
+                <img src="https://www.rebootwithjoe.com/wp-content/uploads/2012/05/watermelon-pineapple-juice.jpg" alt="Watermelon Juice" class="item-image">
+                <div class="item-info">
+                    <h4>Watermelon Juice</h4>
+                    <p>Fresh watermelon juice with a hint of mint</p>
+                </div>
+                <div class="item-price">₹80</div>
+                <div class="item-actions">
+                    <button class="add-to-cart-btn" onclick="addToCart('Watermelon Juice', 80)">
+                        <i class="fas fa-plus"></i> Add to Cart
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="menu-section">
+            <h2 class="section-title">Deserts</h2>
+            <div class="menu-item">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQKRN8_L8bzbrsJNA3ksQpgMMD8ynTG6aUnQ&s" alt="Ras Malai" class="item-image">
+                <div class="item-info">
+                    <h4>Ras Malai</h4>
+                    <p>Soft cottage cheese dumplings in sweetened milk</p>
+                </div>
+                <div class="item-price">₹140</div>
+                <div class="item-actions">
+                    <button class="add-to-cart-btn" onclick="addToCart('Ras Malai', 140)">
+                        <i class="fas fa-plus"></i> Add to Cart
+                    </button>
+                </div>
+            </div>
+            <div class="menu-item">
+                <img src="https://media.istockphoto.com/id/667001932/photo/indian-sweet-jalebi.jpg?s=612x612&w=0&k=20&c=SnqRm_JelHknnLHFTOQNjHZcvLLksf-bgMKBzXwrJ5k=" alt="Jalebi" class="item-image">
+                <div class="item-info">
+                    <h4>Jalebi</h4>
+                    <p>Crispy spiral-shaped sweet soaked in sugar syrup</p>
+                </div>
+                <div class="item-price">₹120</div>
+                <div class="item-actions">
+                    <button class="add-to-cart-btn" onclick="addToCart('Jalebi', 120)">
+                        <i class="fas fa-plus"></i> Add to Cart
+                    </button>
+                </div>
+            </div>
+            <div class="menu-item">
+                <img src="https://www.cookwithkushi.com/wp-content/uploads/2019/10/best_rice_kheer_recipe_doodh_pak.jpg" alt="Kheer" class="item-image">
+                <div class="item-info">
+                    <h4>Kheer</h4>
+                    <p>Traditional rice pudding with milk and nuts</p>
+                </div>
+                <div class="item-price">₹110</div>
+                <div class="item-actions">
+                    <button class="add-to-cart-btn" onclick="addToCart('Kheer', 110)">
+                        <i class="fas fa-plus"></i> Add to Cart
+                    </button>
+                </div>
+            </div>
+            <div class="menu-item">
+                <img src="https://www.whiskaffair.com/wp-content/uploads/2019/05/Gajar-Ka-Halwa-2-3.jpg" alt="Gajar Halwa" class="item-image">
+                <div class="item-info">
+                    <h4>Gajar Halwa</h4>
+                    <p>Sweet carrot pudding cooked with milk and ghee</p>
+                </div>
+                <div class="item-price">₹130</div>
+                <div class="item-actions">
+                    <button class="add-to-cart-btn" onclick="addToCart('Gajar Halwa', 130)">
+                        <i class="fas fa-plus"></i> Add to Cart
+                    </button>
+                </div>
+            </div>
+            <div class="menu-item">
+                <img src="https://img-cdn.publive.online/fit-in/1200x675/sanjeev-kapoor/media/post_banners/58bd6f53ff3cb1747031ed71bfe79c216bda4ac7d4bf4060bafe31f84cb72ea9.jpg" alt="Kulfi Falooda" class="item-image">
+                <div class="item-info">
+                    <h4>Kulfi Falooda</h4>
+                    <p>Traditional kulfi served with vermicelli and rose syrup</p>
+                </div>
+                <div class="item-price">₹160</div>
+                <div class="item-actions">
+                    <button class="add-to-cart-btn" onclick="addToCart('Kulfi Falooda', 160)">
+                        <i class="fas fa-plus"></i> Add to Cart
+                    </button>
+                </div>
+            </div>
+            <div class="menu-item">
+                <img src="https://palatesdesire.com/wp-content/uploads/2022/09/rasgulla-recipe@palates-desire-500x375.jpg" alt="Rasgulla" class="item-image">
+                <div class="item-info">
+                    <h4>Rasgulla</h4>
+                    <p>Spongy cottage cheese balls in sugar syrup</p>
+                </div>
+                <div class="item-price">₹90</div>
+                <div class="item-actions">
+                    <button class="add-to-cart-btn" onclick="addToCart('Rasgulla', 90)">
+                        <i class="fas fa-plus"></i> Add to Cart
+                    </button>
+                </div>
+            </div>
+            <div class="menu-item">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSbBH0SPFzSO0Ew1TkP-kqq0jTH0zaZg3serA&s" alt="Phirni" class="item-image">
+                <div class="item-info">
+                    <h4>Phirni</h4>
+                    <p>Creamy rice pudding flavored with cardamom and nuts</p>
+                </div>
+                <div class="item-price">₹100</div>
+                <div class="item-actions">
+                    <button class="add-to-cart-btn" onclick="addToCart('Phirni', 100)">
+                        <i class="fas fa-plus"></i> Add to Cart
+                    </button>
+                </div>
+            </div>
+            <div class="menu-item">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTGbz1HWN0ggUPXfxS1b1fdIy4j3chY7cSHuw&s" alt="Shahi Tukda" class="item-image">
+                <div class="item-info">
+                    <h4>Shahi Tukda</h4>
+                    <p>Royal bread pudding with rabri and dry fruits</p>
+                </div>
+                <div class="item-price">₹150</div>
+                <div class="item-actions">
+                    <button class="add-to-cart-btn" onclick="addToCart('Shahi Tukda', 150)">
+                        <i class="fas fa-plus"></i> Add to Cart
+                    </button>
+                </div>
+            </div>
+            <div class="menu-item">
+                <img src="https://www.tomatoblues.com/wp-content/uploads/2022/04/mango-shrikhand-3.jpg" alt="Mango Shrikhand" class="item-image">
+                <div class="item-info">
+                    <h4>Mango Shrikhand</h4>
+                    <p>Sweetened yogurt dessert with fresh mango flavor</p>
+                </div>
+                <div class="item-price">₹120</div>
+                <div class="item-actions">
+                    <button class="add-to-cart-btn" onclick="addToCart('Mango Shrikhand', 120)">
+                        <i class="fas fa-plus"></i> Add to Cart
+                    </button>
+                </div>
+            </div>
+            <div class="menu-item">
+                <img src="https://aayanshkitchen.com/wp-content/uploads/2025/03/IMG_2650.jpg" alt="Malpua with Rabri" class="item-image">
+                <div class="item-info">
+                    <h4>Malpua with Rabri</h4>
+                    <p>Sweet pancakes served with thick sweetened milk</p>
+                </div>
+                <div class="item-price">₹160</div>
+                <div class="item-actions">
+                    <button class="add-to-cart-btn" onclick="addToCart('Malpua with Rabri', 160)">
+                        <i class="fas fa-plus"></i> Add to Cart
+                    </button>
+                </div>
+            </div>
+            <div class="menu-item">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/4/48/Basundi_in_Maharashtrian_style.jpg" alt="Basundi" class="item-image">
+                <div class="item-info">
+                    <h4>Basundi</h4>
+                    <p>Thick sweetened milk dessert with cardamom and nuts</p>
+                </div>
+                <div class="item-price">₹130</div>
+                <div class="item-actions">
+                    <button class="add-to-cart-btn" onclick="addToCart('Basundi', 130)">
+                        <i class="fas fa-plus"></i> Add to Cart
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button class="cart-icon" onclick="openCart()">
+        <i class="fas fa-shopping-cart"></i>
+        <span class="cart-count" id="cartCount">0</span>
+    </button>
+
+    <script>
+        function addToCart(name, price) {
+            let cart = JSON.parse(localStorage.getItem('foodCart')) || [];
+            const existingItem = cart.find(item => item.name === name);
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({ name, price, quantity: 1 });
+            }
+            localStorage.setItem('foodCart', JSON.stringify(cart));
+            updateCartCount();
+            showNotification(name + ' added to cart!');
+        }
+        
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.textContent = message;
+            notification.style.cssText = 'position:fixed;top:140px;right:20px;background:#27ae60;color:white;padding:15px 25px;border-radius:8px;z-index:1001;font-weight:600;box-shadow:0 4px 15px rgba(0,0,0,0.2);';
+            document.body.appendChild(notification);
+            setTimeout(() => notification.remove(), 3000);
+        }
+        
+        function updateCartCount() {
+            const cart = JSON.parse(localStorage.getItem('foodCart')) || [];
+            const count = cart.reduce((total, item) => total + item.quantity, 0);
+            document.getElementById('cartCount').textContent = count;
+        }
+        
+        function openCart() {
+            window.location.href = 'order.html';
+        }
+        
+        updateCartCount();
+    </script>
+</body>
+</html>

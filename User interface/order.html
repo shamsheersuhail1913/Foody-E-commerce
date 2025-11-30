@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Order - Foody</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍽️</text></svg>" type="image/svg+xml">
+    <script src="history-manager.js"></script>
+    <style>
+        * { -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; }
+        .order-container { max-width: 800px; margin: 0 auto; padding: 100px 20px 50px; }
+        .order-header { text-align: center; margin-bottom: 40px; }
+        .order-title { font-size: 2.5rem; font-weight: 700; color: #2c3e50; margin-bottom: 10px; }
+        .order-subtitle { font-size: 1.1rem; color: #7f8c8d; }
+        .order-list { background: white; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); overflow: hidden; }
+        .order-item { display: flex; align-items: center; padding: 20px; border-bottom: 1px solid #eee; }
+        .order-item:last-child { border-bottom: none; }
+        .item-image { width: 60px; height: 60px; border-radius: 8px; object-fit: cover; margin-right: 15px; }
+        .item-info { flex: 1; }
+        .item-name { font-size: 1.2rem; font-weight: 600; color: #2c3e50; margin-bottom: 5px; }
+        .item-quantity { color: #7f8c8d; font-size: 0.9rem; }
+        .item-price { font-size: 1.1rem; font-weight: 700; color: #e74c3c; }
+        .order-total { background: #f8f9fa; padding: 20px; text-align: center; }
+        .total-text { font-size: 1.3rem; font-weight: 700; color: #2c3e50; }
+        .empty-cart { text-align: center; padding: 60px 20px; }
+        .empty-icon { font-size: 4rem; color: #bdc3c7; margin-bottom: 20px; }
+        .empty-text { font-size: 1.2rem; color: #7f8c8d; margin-bottom: 30px; }
+        .back-btn { position: fixed; top: 20px; left: 20px; background: #e74c3c; color: white; border: none; padding: 12px 20px; border-radius: 25px; cursor: pointer; font-weight: 600; z-index: 1000; }
+        .back-btn:hover { background: #c0392b; }
+        .checkout-btn { background: #27ae60; color: white; border: none; padding: 15px 30px; border-radius: 25px; font-size: 1.1rem; font-weight: 600; cursor: pointer; margin-top: 20px; }
+        .checkout-btn:hover { background: #219a52; }
+        .quantity-controls { display: flex; align-items: center; gap: 10px; margin: 10px 0; }
+        .qty-btn { background: #3498db; color: white; border: none; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; font-weight: bold; }
+        .qty-btn:hover { background: #2980b9; }
+        .qty-display { font-weight: 600; min-width: 30px; text-align: center; }
+        .remove-btn { background: #e74c3c; color: white; border: none; padding: 8px 12px; border-radius: 5px; cursor: pointer; font-size: 0.8rem; margin-left: 15px; }
+        .remove-btn:hover { background: #c0392b; }
+    </style>
+</head>
+<body>
+    <button onclick="window.location.href='index.html'" style="position: fixed; top: 80px; left: 25px; background: #e74c3c; color: white; border: none; padding: 15px 25px; border-radius: 30px; cursor: pointer; font-weight: 600; z-index: 1000; font-size: 1rem; transition: all 0.3s ease;" onmouseover="this.style.background='#c0392b'" onmouseout="this.style.background='#e74c3c'">
+        <i class="fas fa-arrow-left"></i> Back to Home
+    </button>
+
+    <div class="order-container">
+        <div class="order-header">
+            <h1 class="order-title">Your Order</h1>
+            <p class="order-subtitle">Review your items before checkout</p>
+        </div>
+
+        <div id="orderContent">
+            <!-- Order items will be populated here -->
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        document.addEventListener('selectstart', e => e.preventDefault());
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && (e.key === 'c' || e.key === 'x' || e.key === 'v' || e.key === 'a' || e.key === 's' || e.key === 'u')) {
+                e.preventDefault();
+            }
+            if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I')) {
+                e.preventDefault();
+            }
+        });
+
+        const itemImages = {
+            'Paneer Tikka': 'https://www.cookwithmanali.com/wp-content/uploads/2015/07/Restaurant-Style-Recipe-Paneer-Tikka-480x270.jpg',
+            'Veg Samosa (2 pcs)': 'https://images.unsplash.com/photo-1601050690597-df0568f70950?w=400&h=200&fit=crop',
+            'Chicken 65': 'https://images.unsplash.com/photo-1567620832903-9fc6debc209f?w=400&h=200&fit=crop',
+            'Fish Fingers': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTh2JszlxQ7XuaucmgcgVJ4MnUVs_PGItK5-A&s',
+            'Hara Bhara Kabab': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSfpV7d_PfUsjROveUwhCCjYRqHzUo5TxYZhA&s',
+            'Murg Malai Tikka': 'https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?w=400&h=200&fit=crop',
+            'Tandoori Momos': 'https://images.unsplash.com/photo-1496116218417-1a781b1c416c?w=400&h=200&fit=crop',
+            'Crispy Corn': 'https://www.dillandthyme.com/wp-content/uploads/2023/03/Crispy-Corn-Chaat-FI.jpg',
+            'Gobi Manchurian': 'https://palatesdesire.com/wp-content/uploads/2022/09/dry-gobi-manchurian-recipe@palates-desire.jpg',
+            'Chicken Manchurian': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQEgAtrinlnlAFg1jvyspOO2uW37LS7UU-HWw&s',
+            'Paneer Chilli Dry': 'https://spiceit.in/wp-content/uploads/2022/05/paneer-chilli-dry.jpg',
+            'Prawn Koliwada': 'https://thefusionarycook.com/wp-content/uploads/2025/06/prawn-koliwada.jpg',
+            'Kadai Paneer': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQpu92KfdTKHEESa6YsfT-8xIxi3TXGdx7CCw&s',
+            'Mix Veg Curry': 'https://vismaifood.com/storage/app/uploads/public/ed3/817/fa2/thumb__1200_0_0_0_auto.jpg',
+            'Malai Kofta': 'https://carameltintedlife.com/wp-content/uploads/2020/11/Malai-Kofta-1-of-1-9.jpg',
+            'Jeera Aloo': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQE26YmX5Bb1Bx06QqkB9kgPHpA1IgB7ta6Ag&s',
+            'Veg Kolhapuri': 'https://myfoodstory.com/wp-content/uploads/2022/04/Veg-Kolhapuri-3.jpg',
+            'Mushroom Masala': 'https://static.toiimg.com/photo/75534551.cms',
+            'Veg Handi': 'https://s3-ap-south-1.amazonaws.com/betterbutterbucket-silver/alaka-jena149562528759256e4698d5b.jpeg',
+            'Paneer Lababdar': 'https://i.pinimg.com/736x/c6/3b/39/c63b391025f3ae6cdf6cefa1ddd0e798.jpg',
+            'Paneer Butter Masala': 'https://myfoodstory.com/wp-content/uploads/2021/07/restaurant-style-paneer-butter-masala-2-500x500.jpg',
+            'Dal Makhani': 'https://www.scrumptiously.com/wp-content/uploads/2024/10/MoongDalTadka.webp',
+            'Palak Paneer': 'https://www.indianveggiedelight.com/wp-content/uploads/2017/10/palak-paneer-recipe-featured.jpg',
+            'Aloo Gobi': 'https://ministryofcurry.com/wp-content/uploads/2017/04/Aloo-Gobi-5-500x500.jpg',
+            'Chole Bhature': 'https://upload.wikimedia.org/wikipedia/commons/9/9e/Chole_Bhature_from_Nagpur.JPG',
+            'Veg Biryani': 'https://i.ytimg.com/vi/Do7ZdUodDdw/maxresdefault.jpg',
+            'Rogan Josh': 'https://static.toiimg.com/photo/63201465.cms',
+            'Fish Curry': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRkmOKogYC-nhKy3wcnspsgz1feQn3WZ8IZ1g&s',
+            'Tandoori Chicken (Half)': 'https://www.cubesnjuliennes.com/wp-content/uploads/2022/12/Tandoori-Chicken-Recipe.jpg',
+            'Prawn Masala': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTi5KGJ_xT3pW7hqDxVRHAefnAeTAGBMabAPA&s',
+            'Chicken Tikka Masala': 'https://www.chefadora.com/_next/image?url=https%3A%2F%2Fchefadora.b-cdn.net%2Fmedium_Gemini_Generated_Image_fklym8fklym8fkly_e5530149e2.jpeg&w=3840&q=75',
+            'Egg Curry': 'https://cdn.jwplayer.com/v2/media/cU6PAcy8/poster.jpg?width=1920',
+            'Mutton Biryani': 'https://www.licious.in/blog/wp-content/uploads/2022/06/mutton-hyderabadi-biryani-01.jpg',
+            'Chicken Korma': 'https://i.ndtvimg.com/i/2016-10/chicken-korma_650x400_51475662188.jpg',
+            'Kerala Fish Fry': 'https://www.thetakeiteasychef.com/wp-content/uploads/2017/12/KFF-FI1-Compressed.jpg',
+            'Crab Masala': 'https://www.licious.in/blog/wp-content/uploads/2020/12/Crab-Curry.jpg',
+            'Butter Chicken': 'https://bellyfull.net/wp-content/uploads/2022/08/Butter-Chicken-blog-1.jpg',
+            'Hyderabadi Chicken Biryani': 'https://www.thehosteller.com/_next/image/?url=https%3A%2F%2Fstatic.thehosteller.com%2Fhostel%2Fimages%2Fimage.jpg%2Fimage-1744199226259.jpg&w=2048&q=75',
+            'Pista Kulfi': 'https://www.sharmispassions.com/wp-content/uploads/2014/05/mango-kulfi7.jpg',
+            'Chocolate Scoop': 'https://www.milkmaid.in/sites/default/files/2022-12/Chocolate-Ice-Cream-335x300.jpg',
+            'Butterscotch Scoop': 'https://thumbs.dreamstime.com/b/creamy-butterscotch-ice-cream-bowl-spoon-serving-indulgent-dessert-option-362792590.jpg',
+            'Kesar Pista Ice Cream': 'https://5.imimg.com/data5/SELLER/Default/2025/5/511440656/FI/EL/GV/37776596/kesar-pista-ice-cream-500x500.png',
+            'Matka Kulfi': 'https://5.imimg.com/data5/EM/EG/BW/SELLER-9521221/malai-matka-kulfi-ice-cream-500x500.jpg',
+            'Cassata Slice': 'https://myfoodstory.com/wp-content/uploads/2020/11/Classic-Cassata-Upgraded-4.jpg',
+            'Tender Coconut Ice Cream': 'https://theflavourtrailbydivya.wordpress.com/wp-content/uploads/2020/06/img_3117.jpg?w=816',
+            'Rose Falooda': 'https://rakskitchen.net/wp-content/uploads/2015/05/17362127519_8c1a24c279_z.jpg',
+            'Vanilla Scoop': 'https://www.cuisinart.co.uk/dw/image/v2/ABAF_PRD/on/demandware.static/-/Sites-uk-cuisinart-sfra-Library/default/dw02d70fe5///images/recipes/classic-vanilla-ice-cream.jpg?sw=1200&sh=1200&sm=fit',
+            'Mango Scoop': 'https://www.milkmaid.in/sites/default/files/2022-12/Mango-Ice-Cream-335x300.jpg',
+            'Filter Coffee': 'https://sidapur.com/cdn/shop/products/Edit_DSC_0033_88b88cbb-06c3-4526-a888-0f441dbcb37d_1100x.jpg?v=1636284130',
+            'Nimbu Pani': 'https://thumbs.dreamstime.com/b/glass-nimbu-pani-refreshing-drink-made-lemon-sugar-water-garnished-mint-leaves-ice-isolated-clean-white-372711746.jpg',
+            'Mango Lassi': 'https://lentillovingfamily.com/wp-content/uploads/2025/05/mango-lassi-2.jpg',
+            'Soft Drinks': 'https://thumbs.dreamstime.com/b/bottles-assorted-global-soft-drinks-poznan-poland-jan-drink-market-dominated-brands-few-multinational-companies-founded-84850971.jpg',
+            'Cold Coffee': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwb39dnHXFMWaZpGnWUWIvlUVgdsP40iDTUQ&s',
+            'Jaljeera': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTORTCfb3F9jbhbmp3JOjfpbeZSRaOfYGr2HA&s',
+            'Badam Milk (hot/cold)': 'https://images.unsplash.com/photo-1544145945-f90425340c7e?w=400&h=200&fit=crop',
+            'Blue Lagoon Mocktail': 'https://drinkdesoi.com/cdn/shop/articles/Blue_Lagoon_Mocktail_Recipe_1_2048x2048.webp?v=1732291310',
+            'Fresh Lime Soda': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQdeq_qps9RPo9qKXHRAXH5iQKSQtJO49c7qQ&s',
+            'Watermelon Juice': 'https://www.rebootwithjoe.com/wp-content/uploads/2012/05/watermelon-pineapple-juice.jpg',
+            'Masala Chai': 'https://cdn.shopify.com/s/files/1/0758/6929/0779/files/Masala_Tea_-_Annams_Recipes_Shop_2_480x480.jpg?v=1732347934',
+            'Sweet Lassi': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQAG_AOgxTbaj7wJEP0R2aiZoNf9xi99Khs-g&s',
+            'Ras Malai': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQKRN8_L8bzbrsJNA3ksQpgMMD8ynTG6aUnQ&s',
+            'Jalebi': 'https://media.istockphoto.com/id/667001932/photo/indian-sweet-jalebi.jpg?s=612x612&w=0&k=20&c=SnqRm_JelHknnLHFTOQNjHZcvLLksf-bgMKBzXwrJ5k=',
+            'Kheer': 'https://www.cookwithkushi.com/wp-content/uploads/2019/10/best_rice_kheer_recipe_doodh_pak.jpg',
+            'Gajar Halwa': 'https://www.whiskaffair.com/wp-content/uploads/2019/05/Gajar-Ka-Halwa-2-3.jpg',
+            'Kulfi Falooda': 'https://img-cdn.publive.online/fit-in/1200x675/sanjeev-kapoor/media/post_banners/58bd6f53ff3cb1747031ed71bfe79c216bda4ac7d4bf4060bafe31f84cb72ea9.jpg',
+            'Rasgulla': 'https://palatesdesire.com/wp-content/uploads/2022/09/rasgulla-recipe@palates-desire-500x375.jpg',
+            'Phirni': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSbBH0SPFzSO0Ew1TkP-kqq0jTH0zaZg3serA&s',
+            'Shahi Tukda': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTGbz1HWN0ggUPXfxS1b1fdIy4j3chY7cSHuw&s',
+            'Mango Shrikhand': 'https://www.tomatoblues.com/wp-content/uploads/2022/04/mango-shrikhand-3.jpg',
+            'Malpua with Rabri': 'https://aayanshkitchen.com/wp-content/uploads/2025/03/IMG_2650.jpg',
+            'Basundi': 'https://upload.wikimedia.org/wikipedia/commons/4/48/Basundi_in_Maharashtrian_style.jpg',
+            'Gulab Jamun': 'https://bikanermawabhandar.com/wp-content/uploads/2024/04/WhatsApp-Image-2024-04-16-at-16.59.43.jpeg'
+        };
+
+        function loadOrder() {
+            const cart = JSON.parse(localStorage.getItem('foodCart')) || [];
+            const orderContent = document.getElementById('orderContent');
+            
+            if (cart.length === 0) {
+                orderContent.innerHTML = `
+                    <div class="empty-cart">
+                        <div class="empty-icon"><i class="fas fa-shopping-cart"></i></div>
+                        <div class="empty-text">Your cart is empty</div>
+                        <button class="btn btn-primary" onclick="window.location.href='browse-menu.html'">Browse Menu</button>
+                    </div>
+                `;
+                return;
+            }
+
+            let total = 0;
+            let orderHTML = '<div class="order-list">';
+            
+            cart.forEach((item, index) => {
+                const itemTotal = item.price * item.quantity;
+                total += itemTotal;
+                const imageUrl = itemImages[item.name] || 'https://via.placeholder.com/60x60?text=Food';
+                orderHTML += `
+                    <div class="order-item">
+                        <img src="${imageUrl}" alt="${item.name}" class="item-image">
+                        <div class="item-info">
+                            <div class="item-name">${item.name}</div>
+                            <div class="quantity-controls">
+                                <button class="qty-btn" onclick="updateQuantity(${index}, -1)">-</button>
+                                <span class="qty-display">${item.quantity}</span>
+                                <button class="qty-btn" onclick="updateQuantity(${index}, 1)">+</button>
+                            </div>
+                        </div>
+                        <div class="item-price">₹${itemTotal}</div>
+                        <button class="remove-btn" onclick="removeItem(${index})">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                `;
+            });
+            
+            orderHTML += `
+                <div class="order-total">
+                    <div class="total-text">Total: ₹${total}</div>
+                    <button class="checkout-btn" onclick="checkout()">
+                        <i class="fas fa-credit-card"></i> Proceed to Checkout
+                    </button>
+                </div>
+            </div>`;
+            
+            orderContent.innerHTML = orderHTML;
+        }
+
+        function updateQuantity(index, change) {
+            let cart = JSON.parse(localStorage.getItem('foodCart')) || [];
+            cart[index].quantity += change;
+            if (cart[index].quantity <= 0) {
+                cart.splice(index, 1);
+            }
+            localStorage.setItem('foodCart', JSON.stringify(cart));
+            loadOrder();
+        }
+
+        function removeItem(index) {
+            let cart = JSON.parse(localStorage.getItem('foodCart')) || [];
+            cart.splice(index, 1);
+            localStorage.setItem('foodCart', JSON.stringify(cart));
+            loadOrder();
+        }
+
+        function checkout() {
+            const cart = JSON.parse(localStorage.getItem('foodCart')) || [];
+            if (cart.length === 0) {
+                alert('Your cart is empty!');
+                return;
+            }
+            
+            // Calculate total
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            
+            // Store order details for delivery form
+            sessionStorage.setItem('checkoutOrder', JSON.stringify({
+                items: cart,
+                total: total
+            }));
+            
+            // Clear cart
+            localStorage.removeItem('foodCart');
+            
+            // Redirect to delivery details page
+            window.location.href = 'delivery-details.html';
+        }
+
+        // Load order on page load
+        loadOrder();
+    </script>
+</body>
+</html>

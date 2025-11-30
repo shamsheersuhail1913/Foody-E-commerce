@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Table Booking - Foody</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍽️</text></svg>" type="image/svg+xml">
+    <style>
+        * { -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; }
+        .booking-container { max-width: 800px; margin: 0 auto; padding: 100px 20px 50px; }
+        .booking-header { text-align: center; margin-bottom: 40px; }
+        .booking-title { font-size: 2.5rem; font-weight: 700; color: #2c3e50; margin-bottom: 10px; }
+        .booking-subtitle { font-size: 1.1rem; color: #7f8c8d; }
+        .booking-form { background: white; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); padding: 30px; }
+        .form-group { margin-bottom: 25px; }
+        .form-label { display: block; font-size: 1.1rem; font-weight: 600; color: #2c3e50; margin-bottom: 8px; }
+        .form-input, .form-select { width: 100%; padding: 15px; border: 2px solid #ecf0f1; border-radius: 10px; font-size: 1rem; transition: border-color 0.3s; }
+        .form-input:focus, .form-select:focus { outline: none; border-color: #e74c3c; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .time-slots { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; margin-top: 10px; }
+        .time-slot { padding: 12px; border: 2px solid #ecf0f1; border-radius: 8px; text-align: center; cursor: pointer; transition: all 0.3s; }
+        .time-slot:hover { border-color: #e74c3c; background: #fdf2f2; }
+        .time-slot.selected { background: #e74c3c; color: white; border-color: #e74c3c; }
+        .time-slot.unavailable { background: #bdc3c7; color: white; cursor: not-allowed; }
+        .book-btn { background: #27ae60; color: white; border: none; padding: 15px 30px; border-radius: 25px; font-size: 1.1rem; font-weight: 600; cursor: pointer; width: 100%; margin-top: 20px; }
+        .book-btn:hover { background: #219a52; }
+        .book-btn:disabled { background: #bdc3c7; cursor: not-allowed; }
+        .back-btn { position: fixed; top: 80px; left: 25px; background: #e74c3c; color: white; border: none; padding: 15px 25px; border-radius: 30px; cursor: pointer; font-weight: 600; z-index: 1000; font-size: 1rem; transition: all 0.3s ease; }
+        .back-btn:hover { background: #c0392b; }
+        .success-message { background: #d4edda; color: #155724; padding: 20px; border-radius: 10px; margin-bottom: 20px; text-align: center; display: none; }
+        .error-message { background: #f8d7da; color: #721c24; padding: 20px; border-radius: 10px; margin-bottom: 20px; text-align: center; display: none; }
+    </style>
+</head>
+<body>
+    <button onclick="window.location.href='index.html'" class="back-btn">
+        <i class="fas fa-arrow-left"></i> Back to Home
+    </button>
+
+    <div class="booking-container">
+        <div class="booking-header">
+            <h1 class="booking-title">Table Booking</h1>
+            <p class="booking-subtitle">Reserve your table for a perfect dining experience</p>
+        </div>
+
+        <div id="successMessage" class="success-message">
+            <i class="fas fa-check-circle"></i> Your table has been booked successfully!
+        </div>
+
+        <div id="errorMessage" class="error-message">
+            <i class="fas fa-exclamation-circle"></i> Please fill in all required fields.
+        </div>
+
+        <form class="booking-form" id="bookingForm">
+            <div class="form-group">
+                <label class="form-label" for="customerName">Full Name *</label>
+                <input type="text" id="customerName" class="form-input" placeholder="Enter your full name" required>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label" for="phone">Phone Number *</label>
+                    <input type="tel" id="phone" class="form-input" placeholder="Enter phone number" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="email">Email</label>
+                    <input type="email" id="email" class="form-input" placeholder="Enter email address">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label" for="bookingDate">Date *</label>
+                    <input type="date" id="bookingDate" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="guests">Number of Guests *</label>
+                    <select id="guests" class="form-select" required>
+                        <option value="">Select guests</option>
+                        <option value="1">1 Guest</option>
+                        <option value="2">2 Guests</option>
+                        <option value="3">3 Guests</option>
+                        <option value="4">4 Guests</option>
+                        <option value="5">5 Guests</option>
+                        <option value="6">6 Guests</option>
+                        <option value="7">7 Guests</option>
+                        <option value="8">8 Guests</option>
+                        <option value="8+">8+ Guests</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label" for="restaurant">Restaurant *</label>
+                    <select id="restaurant" class="form-select" required>
+                        <option value="">Select restaurant</option>
+                        <option value="BlueMoon Restaurant">BlueMoon Restaurant</option>
+                        <option value="Pista House">Pista House</option>
+                        <option value="Khana Khajana">Khana Khajana</option>
+                        <option value="Spice Garden">Spice Garden</option>
+                        <option value="Royal Palace">Royal Palace</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="tableNumber">Table Number *</label>
+                    <select id="tableNumber" class="form-select" required>
+                        <option value="">Select table</option>
+                        <option value="T01">Table 01 (2 seats)</option>
+                        <option value="T02">Table 02 (2 seats)</option>
+                        <option value="T03">Table 03 (4 seats)</option>
+                        <option value="T04">Table 04 (4 seats)</option>
+                        <option value="T05">Table 05 (6 seats)</option>
+                        <option value="T06">Table 06 (6 seats)</option>
+                        <option value="T07">Table 07 (8 seats)</option>
+                        <option value="T08">Table 08 (8 seats)</option>
+                        <option value="T09">Table 09 (10 seats)</option>
+                        <option value="T10">Table 10 (10 seats)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Preferred Time *</label>
+                <div class="time-slots" id="timeSlots">
+                    <div class="time-slot" data-time="12:00">12:00 PM</div>
+                    <div class="time-slot" data-time="12:30">12:30 PM</div>
+                    <div class="time-slot" data-time="13:00">1:00 PM</div>
+                    <div class="time-slot" data-time="13:30">1:30 PM</div>
+                    <div class="time-slot" data-time="14:00">2:00 PM</div>
+                    <div class="time-slot" data-time="14:30">2:30 PM</div>
+                    <div class="time-slot" data-time="19:00">7:00 PM</div>
+                    <div class="time-slot" data-time="19:30">7:30 PM</div>
+                    <div class="time-slot" data-time="20:00">8:00 PM</div>
+                    <div class="time-slot" data-time="20:30">8:30 PM</div>
+                    <div class="time-slot" data-time="21:00">9:00 PM</div>
+                    <div class="time-slot" data-time="21:30">9:30 PM</div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="specialRequests">Special Requests</label>
+                <textarea id="specialRequests" class="form-input" rows="3" placeholder="Any special requests or dietary requirements..."></textarea>
+            </div>
+
+            <button type="submit" class="book-btn" id="bookBtn">
+                <i class="fas fa-calendar-check"></i> Book Table
+            </button>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        document.addEventListener('selectstart', e => e.preventDefault());
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && (e.key === 'c' || e.key === 'x' || e.key === 'v' || e.key === 'a' || e.key === 's' || e.key === 'u')) {
+                e.preventDefault();
+            }
+            if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I')) {
+                e.preventDefault();
+            }
+        });
+
+        // Set minimum date to today
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('bookingDate').min = today;
+
+        let selectedTime = null;
+
+        // Time slot selection
+        document.querySelectorAll('.time-slot').forEach(slot => {
+            slot.addEventListener('click', function() {
+                if (this.classList.contains('unavailable')) return;
+                
+                document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
+                this.classList.add('selected');
+                selectedTime = this.dataset.time;
+            });
+        });
+
+        // Form submission
+        document.getElementById('bookingForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('customerName').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const date = document.getElementById('bookingDate').value;
+            const guests = document.getElementById('guests').value;
+            const restaurant = document.getElementById('restaurant').value;
+            const tableNumber = document.getElementById('tableNumber').value;
+
+            if (!name || !phone || !date || !guests || !selectedTime || !restaurant || !tableNumber) {
+                showMessage('error', 'Please fill in all required fields and select a time slot.');
+                return;
+            }
+
+            // Simulate booking process
+            const bookBtn = document.getElementById('bookBtn');
+            bookBtn.disabled = true;
+            bookBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Booking...';
+
+            setTimeout(() => {
+                // Generate booking ID
+                const bookingId = 'BK' + Date.now().toString().slice(-6);
+
+                // Save booking to sessionStorage for confirmation page
+                const bookingData = {
+                    bookingId: bookingId,
+                    bookingDetails: {
+                        name,
+                        phone,
+                        email: document.getElementById('email').value,
+                        date,
+                        time: selectedTime,
+                        guests,
+                        restaurant,
+                        tableNumber,
+                        specialRequests: document.getElementById('specialRequests').value
+                    },
+                    bookingTime: new Date().toISOString()
+                };
+
+                sessionStorage.setItem('lastBooking', JSON.stringify(bookingData));
+
+                // Also save to localStorage for history
+                const booking = {
+                    id: bookingId,
+                    name,
+                    phone,
+                    email: document.getElementById('email').value,
+                    date,
+                    time: selectedTime,
+                    guests,
+                    restaurant,
+                    tableNumber,
+                    specialRequests: document.getElementById('specialRequests').value,
+                    status: 'Confirmed',
+                    createdAt: new Date().toISOString()
+                };
+
+                let bookings = JSON.parse(localStorage.getItem('bookingHistory') || '[]');
+                bookings.push(booking);
+                localStorage.setItem('bookingHistory', JSON.stringify(bookings));
+
+                // Redirect to confirmation page
+                window.location.href = 'table-booking-confirmation.html';
+            }, 2000);
+        });
+
+        function showMessage(type, text) {
+            const successMsg = document.getElementById('successMessage');
+            const errorMsg = document.getElementById('errorMessage');
+            
+            successMsg.style.display = 'none';
+            errorMsg.style.display = 'none';
+            
+            if (type === 'success') {
+                successMsg.textContent = text;
+                successMsg.style.display = 'block';
+            } else {
+                errorMsg.textContent = text;
+                errorMsg.style.display = 'block';
+            }
+            
+            setTimeout(() => {
+                successMsg.style.display = 'none';
+                errorMsg.style.display = 'none';
+            }, 5000);
+        }
+
+        function formatTime(time) {
+            const [hours, minutes] = time.split(':');
+            const hour = parseInt(hours);
+            const ampm = hour >= 12 ? 'PM' : 'AM';
+            const displayHour = hour > 12 ? hour - 12 : hour;
+            return `${displayHour}:${minutes} ${ampm}`;
+        }
+
+        // Simulate some unavailable slots
+        function updateAvailability() {
+            const unavailableSlots = ['13:30', '20:00', '21:30'];
+            unavailableSlots.forEach(time => {
+                const slot = document.querySelector(`[data-time="${time}"]`);
+                if (slot) {
+                    slot.classList.add('unavailable');
+                    slot.title = 'This time slot is not available';
+                }
+            });
+        }
+
+        updateAvailability();
+    </script>
+</body>
+</html>
